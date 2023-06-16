@@ -289,7 +289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92e4eb540a7096835b6047e094efa908, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  somColeta: {fileID: 0}
+  somColeta: {fileID: 8300000, guid: ac6b91a0067387c75a35739f4b100f2e, type: 3}
 --- !u!82 &274440498
 AudioSource:
   m_ObjectHideFlags: 0
