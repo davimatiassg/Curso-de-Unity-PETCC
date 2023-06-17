@@ -5,13 +5,23 @@ using UnityEngine;
 public class Inimigo : MonoBehaviour
 {
     public GameObject Jogador;
-    public float Velocidade = 3f;
-    public float atkSpd = 5f;
-    public int ataque = 1;
+    private float velocidade = 3f;
+    private float pulo = 25f;
+    private int ataque = 1;
 
     private float disMax = 8f;
     private float disMin = 1.1f;
     private float disAtk = 1.1f;
+    private float disPulo = 1.6f;
+
+    private float puloFreq = 1.5f;
+    private float tPulo = 0f;
+    
+    private float atkFreq = 2f;
+    private float tAtk = 0f;
+
+    [SerializeField] private Transform verificadorDePiso;
+    [SerializeField] private LayerMask piso;
 
     private Rigidbody2D rb;
 
@@ -22,41 +32,68 @@ public class Inimigo : MonoBehaviour
 
     void Update()
     {
-        Vector2 direcao = (Vector2)Jogador.transform.position - (Vector2)transform.position;
-        direcao = new Vector2(direcao.x, 0f); // Define a componente vertical como zero
-        float distanciaHorizontal = direcao.x;
+        Vector2 dirPerseguir = Jogador.transform.position - transform.position;
+        float disHorizontal = dirPerseguir.x;
+        float disVertical = dirPerseguir.y;
 
-        Quaternion novaRotacao = Quaternion.LookRotation(Vector3.forward, direcao);
-        rb.MoveRotation(novaRotacao.eulerAngles.z);
+        dirPerseguir.y = 0; /// Define a componente vertical como zero para o objeto não voar
 
-        if (Mathf.Abs(distanciaHorizontal) < disMax && Mathf.Abs(distanciaHorizontal) > disMin)
+        float disJogador = Vector2.Distance(transform.position, Jogador.transform.position);
+
+        if (Mathf.Abs(disHorizontal) > disMin && Mathf.Abs(disHorizontal) < disMax)
         {
             /// Persegue o jogador
-            rb.velocity = direcao.normalized * Velocidade;
+            rb.velocity = new Vector2((dirPerseguir.normalized * velocidade).x, rb.velocity.y);
         }
         else
         {
             /// Fica parado
-            rb.velocity = Vector2.zero;
+            rb.velocity = new Vector2(0f, rb.velocity.y);
 
             /// Ataca o jogador se eles estiver em alcançe de ataque
-            if (Vector2.Distance(transform.position, Jogador.transform.position) <= disAtk)
+            if (disJogador <= disAtk)
             {
-                AtacarJogador();
+                if (tAtk >= atkFreq/Time.deltaTime)
+                {
+                    Jogador.GetComponent<Jogador>().TakeDmg(ataque);
+                    tAtk = 0f;
+                }
+                tAtk ++;
             }
         }
+
+        /// Pulo
+        if (disVertical > disPulo && noChao())
+        {
+            if (tPulo >= puloFreq/Time.deltaTime)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, pulo);
+                tPulo = 0f;
+            }
+            tPulo ++;
+        }
+        else {
+            tPulo = 0f;
+        }
+
     }
 
+    private bool noChao()
+    {
+        return Physics2D.OverlapCircle(verificadorDePiso.position, 0.25f, piso);
+    }
+
+    /*
     /// Chama o método 'TakeDmg' do jogador acada 'atkSpd' segundos
-    private float t = 0f;
     void AtacarJogador()
     {
-        if (t >= atkSpd*Time.deltaTime)
+        if (tAtk >= atkSpd/Time.deltaTime)
         {
             Jogador.GetComponent<Jogador>().TakeDmg(ataque);
-            t = 0f;
+            tAtk = 0f;
         }
-        t ++;
+        tAtk ++;
     }
+    */
 
-}
+};
