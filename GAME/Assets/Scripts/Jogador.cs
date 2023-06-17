@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Movimento : MonoBehaviour
+public class Jogador : MonoBehaviour, I_ObjAtacavel
 {
+    private int Hp = 5;
+
     private float dirHorizontal;
-    private float speed = 10f;
+    private float velocidade = 10f;
     private float pulo = 20f;
 
     [SerializeField] private Rigidbody2D rb;
@@ -27,7 +29,7 @@ public class Movimento : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.velocity = new Vector2(dirHorizontal * speed, rb.velocity.y);
+        rb.velocity = new Vector2(dirHorizontal * velocidade, rb.velocity.y);
     }
 
     private bool noChao()
@@ -40,6 +42,12 @@ public class Movimento : MonoBehaviour
         Vector3 escala = transform.localScale;
         escala.x = Mathf.Sign(dirHorizontal);
         transform.localScale = escala;
+    }
+
+    public void TakeDmg(int dmg)
+    {   
+        Hp -= dmg;
+        Debug.Log("Player: level dano ;-;");
     }
 
 }
