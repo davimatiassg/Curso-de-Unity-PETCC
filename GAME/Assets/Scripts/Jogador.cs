@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Movimento : MonoBehaviour
+public class Jogador : MonoBehaviour
 {
     private float dirHorizontal;
     private float speed = 10f;
