@@ -47,7 +47,7 @@ public class Jogador : MonoBehaviour, I_ObjAtacavel
     public void TakeDmg(int dmg)
     {   
         Hp -= dmg;
-        Debug.Log("Player: level dano ;-;");
+        Debug.Log("Player: levou dano ;-;");
     }
 
 }

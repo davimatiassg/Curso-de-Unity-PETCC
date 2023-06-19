@@ -36,14 +36,15 @@ public class Inimigo : MonoBehaviour
         float disHorizontal = dirPerseguir.x;
         float disVertical = dirPerseguir.y;
 
-        dirPerseguir.y = 0; /// Define a componente vertical como zero para o objeto não voar
+        /// Define a componente vertical como zero para o objeto não voar
+        Vector2 dirPerseguirHorizontal = new Vector2 (dirPerseguir.x, 0f);
 
         float disJogador = Vector2.Distance(transform.position, Jogador.transform.position);
 
         if (Mathf.Abs(disHorizontal) > disMin && Mathf.Abs(disHorizontal) < disMax)
         {
             /// Persegue o jogador
-            rb.velocity = new Vector2((dirPerseguir.normalized * velocidade).x, rb.velocity.y);
+            rb.velocity = new Vector2((dirPerseguirHorizontal.normalized * velocidade).x, rb.velocity.y);
         }
         else
         {

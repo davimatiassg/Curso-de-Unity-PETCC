@@ -203,7 +203,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 274440491}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.35, y: -2.22, z: 0}
+  m_LocalPosition: {x: -7.02, y: -2.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -403,7 +403,7 @@ GameObject:
   - component: {fileID: 619601854}
   - component: {fileID: 619601853}
   - component: {fileID: 619601852}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Inimigo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -901,8 +901,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1267527578}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.81, y: -2.25, z: -0.037659656}
-  m_LocalScale: {x: 8.524, y: 1, z: 1}
+  m_LocalPosition: {x: -7.4688, y: -2.25, z: -0.037659656}
+  m_LocalScale: {x: 19.841314, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1506802934}
