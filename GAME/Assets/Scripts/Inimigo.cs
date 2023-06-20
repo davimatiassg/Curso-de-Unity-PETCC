@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Inimigo : MonoBehaviour
 {
-    public GameObject Jogador;
+    public GameObject Player;
     private float velocidade = 3f;
     private float pulo = 25f;
     private int ataque = 1;
@@ -17,7 +17,7 @@ public class Inimigo : MonoBehaviour
     private float puloFreq = 1.5f;
     private float tPulo = 0f;
     
-    private float atkFreq = 2f;
+    private float atkCd = 1.5f;
     private float tAtk = 0f;
 
     [SerializeField] private Transform verificadorDePiso;
@@ -32,18 +32,18 @@ public class Inimigo : MonoBehaviour
 
     void Update()
     {
-        Vector2 dirPerseguir = Jogador.transform.position - transform.position;
+        Vector2 dirPerseguir = Player.transform.position - transform.position;
         float disHorizontal = dirPerseguir.x;
         float disVertical = dirPerseguir.y;
 
         /// Define a componente vertical como zero para o objeto não voar
         Vector2 dirPerseguirHorizontal = new Vector2 (dirPerseguir.x, 0f);
 
-        float disJogador = Vector2.Distance(transform.position, Jogador.transform.position);
+        float disPlayer = Vector2.Distance(transform.position, Player.transform.position);
 
         if (Mathf.Abs(disHorizontal) > disMin && Mathf.Abs(disHorizontal) < disMax)
         {
-            /// Persegue o jogador
+            /// Persegue o Player
             rb.velocity = new Vector2((dirPerseguirHorizontal.normalized * velocidade).x, rb.velocity.y);
         }
         else
@@ -51,20 +51,12 @@ public class Inimigo : MonoBehaviour
             /// Fica parado
             rb.velocity = new Vector2(0f, rb.velocity.y);
 
-            /// Ataca o jogador se eles estiver em alcançe de ataque
-            if (disJogador <= disAtk)
-            {
-                if (tAtk >= atkFreq/Time.deltaTime)
-                {
-                    Jogador.GetComponent<Jogador>().TakeDmg(ataque);
-                    tAtk = 0f;
-                }
-                tAtk ++;
-            }
+            /// Ataca o Player se eles estiver em alcançe de ataque
+            AtacarPlayer();
         }
 
         /// Pulo
-        if (disVertical > disPulo && noChao())
+        if (disVertical > disPulo && isOnGround())
         {
             if (tPulo >= puloFreq/Time.deltaTime)
             {
@@ -79,22 +71,21 @@ public class Inimigo : MonoBehaviour
 
     }
 
-    private bool noChao()
+    private bool isOnGround()
     {
         return Physics2D.OverlapCircle(verificadorDePiso.position, 0.25f, piso);
     }
 
-    /*
-    /// Chama o método 'TakeDmg' do jogador acada 'atkSpd' segundos
-    void AtacarJogador()
+
+    /// Chama o método 'TakeDmg' do Player acada 'atkCd' segundos
+    void AtacarPlayer()
     {
-        if (tAtk >= atkSpd/Time.deltaTime)
+        tAtk -= Time.deltaTime;  
+        if (tAtk<=0)
         {
-            Jogador.GetComponent<Jogador>().TakeDmg(ataque);
-            tAtk = 0f;
-        }
-        tAtk ++;
+            Player.GetComponent<Player>().TakeDmg(ataque);
+            tAtk = atkCd;
+        }   
     }
-    */
 
 };

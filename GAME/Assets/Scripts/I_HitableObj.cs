@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface I_ObjAtacavel
+public interface I_HitableObj
 {
     void TakeDmg(int dmg);
 }
