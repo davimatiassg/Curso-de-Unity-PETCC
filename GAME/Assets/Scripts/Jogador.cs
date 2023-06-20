@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Jogador : MonoBehaviour, I_ObjAtacavel
 {
     private int Hp = 5;
