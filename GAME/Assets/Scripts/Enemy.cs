@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Inimigo : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
     public GameObject Player;
     private float velocidade = 3f;
@@ -52,7 +52,10 @@ public class Inimigo : MonoBehaviour
             rb.velocity = new Vector2(0f, rb.velocity.y);
 
             /// Ataca o Player se eles estiver em alcançe de ataque
-            AtacarPlayer();
+            if(disAtk >= disPlayer)
+            {
+                AtacarPlayer();
+            } 
         }
 
         /// Pulo
