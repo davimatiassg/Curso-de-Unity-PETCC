@@ -14,7 +14,7 @@ public class MenuPausar : MonoBehaviour
     [SerializeField] AudioSource musica;
     [SerializeField] AudioSource efeitos;
 
-    bool menuOpcoesAberto = false;
+    private bool menuOpcoesAberto = false;
 
     void Start()
     {
@@ -42,15 +42,9 @@ public class MenuPausar : MonoBehaviour
     }
     public void Opcoes(){
         // Toggle menu opções
-        if (menuOpcoesAberto){
-            menuOpcoesAberto = false;
-            menuMusicaSlider.SetActive(false);
-            menuEfeitosSlider.SetActive(false);
-        } else {
-            menuOpcoesAberto = true;
-            menuMusicaSlider.SetActive(true);
-            menuEfeitosSlider.SetActive(true);
-        }
+        menuOpcoesAberto = !menuOpcoesAberto;
+        menuMusicaSlider.SetActive(menuOpcoesAberto);
+        menuEfeitosSlider.SetActive(menuOpcoesAberto);
     }
     public void SetVolumeMusica(){
         // Atribuir o volume da música de fundo
