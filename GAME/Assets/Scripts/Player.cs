@@ -5,34 +5,51 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, I_HitableObj
 {
-    private int Hp = 5;
-
-    private float H_axis;
+    [SerializeField] private int Hp = 5;
     [SerializeField] private float speed = 10f;
     [SerializeField] private float jump = 20f;
 
+    //Movimentação
+    private float hAxis;
+    [SerializeField] private LayerMask solid;
+    [SerializeField] private Transform floorCheck;
+    [SerializeField] private Rigidbody2D rb;
+
+    //Ataque     
+    [SerializeField] private Transform sling;
     [SerializeField] private float atkCd = 0.25f;
     [SerializeField] private float atkc = 0;
     [SerializeField] private GameObject pellet;
 
 
-    [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private LayerMask solid;
+    //Colecionáveis
+    [SerializeField] private Scorer sc;
 
-    [SerializeField] private Transform floorCheck;
-    [SerializeField] private Transform sling;
+    
+
+    // Sons
+    [SerializeField] AudioClip collectSound;
+
+
+    /// Métodos da Unity:
+    //Start called when the scene is initiated.
+    void Start()
+    {
+        sc.UpdateLives(Hp);
+        sc.AddScore(0);
+    }
 
     // Update is called once per frame
     void Update()
     {
-        H_axis = Input.GetAxisRaw("Horizontal");
+        hAxis = Input.GetAxisRaw("Horizontal");
 
-        if (Input.GetButtonDown("Jump") && isOnGround())
+        if (Input.GetButtonDown("Jump") && IsOnGround())
         {
             rb.velocity = new Vector2(rb.velocity.x, jump);
         }
 
-        if(H_axis != 0)
+        if(hAxis != 0)
         {
             Flip();
         }
@@ -41,7 +58,7 @@ public class Player : MonoBehaviour, I_HitableObj
         if(atkc > 0) { atkc -= Time.deltaTime; }
         if (Input.GetButtonDown("Fire1") && atkc <= 0)
         {
-            shoot();
+            Shoot();
             atkc = atkCd;
         }
 
@@ -49,38 +66,7 @@ public class Player : MonoBehaviour, I_HitableObj
 
     private void FixedUpdate()
     {
-        rb.velocity = new Vector2(H_axis * speed, rb.velocity.y);
-    }
-
-    private bool isOnGround()
-    {
-        return Physics2D.OverlapCircle(floorCheck.position, 0.5f, solid);
-    }
-
-    private void Flip()
-    {
-        Vector3 scale = transform.localScale;
-        scale.x = Mathf.Sign(H_axis);
-        transform.localScale = scale;
-    }
-
-    public void TakeDmg(int dmg)
-    {   
-        Hp -= dmg;
-        Debug.Log("Player: levou dano ;-;");
-        if(Hp <= 0)
-        {
-            //Play Death Anim.
-            Destroy(this.gameObject, 2f); //provisório
-        }
-    }
-
-    public void shoot()
-    {
-        GameObject shot = Instantiate(pellet);
-        Pellet p = shot.GetComponent<Pellet>();
-        p.trs.position = (sling.position);
-        p.rb.velocity = new Vector2(1*p.speed * transform.localScale.x, 0.2f);
+        rb.velocity = new Vector2(hAxis * speed, rb.velocity.y);
     }
 
     public void OnDrawGizmosSelected()
@@ -88,5 +74,56 @@ public class Player : MonoBehaviour, I_HitableObj
         Gizmos.color = new Color(1, 0, 0, 1f);
         Gizmos.DrawWireSphere(floorCheck.position, 0.5f);
     }
+
+
+    /// Métodos de controle das ações:
+    private bool IsOnGround()
+    {
+        return Physics2D.OverlapCircle(floorCheck.position, 0.5f, solid);
+    }
+
+    private void Flip()
+    {
+        Vector3 scale = transform.localScale;
+        scale.x = Mathf.Sign(hAxis);
+        transform.localScale = scale;
+    }
+
+    public void Shoot()
+    {
+        GameObject shot = Instantiate(pellet);
+        Pellet p = shot.GetComponent<Pellet>();
+        p.trs.position = (sling.position);
+        p.rb.velocity = new Vector2(1*p.speed * transform.localScale.x, 0.2f);
+    }
+
+    /// Métodos chamados por outros scripts:
+
+    //Receber dano
+    public void TakeHit(int dmg)
+    {   
+        Hp -= dmg;
+        sc.UpdateLives(Hp);
+        if(Hp <= 0)
+        {
+            //Play Death Anim.
+            Destroy(this.gameObject, 2f); //provisório
+        }
+    }
+
+    //Coletar um item
+    public void Collect(int scoreBonus = 0){
+        // Toca o som de coleta e destroi o objeto
+        GetComponent<AudioSource>().PlayOneShot(collectSound);
+        sc.AddScore(scoreBonus);
+
+        // Adiciona 50 score por coin coletada
+
+
+        
+
+    }
+
+
 
 }

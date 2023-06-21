@@ -17,7 +17,7 @@ public class Pellet : MonoBehaviour
         if(col.gameObject.tag != "Player")
         {
             Destroy(this.gameObject, 0.3f);
-            if(hit != null) { hit.TakeDmg(dmg); }      
+            if(hit != null) { hit.TakeHit(dmg); }      
         }
     }
 }

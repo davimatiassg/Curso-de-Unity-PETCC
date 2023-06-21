@@ -15,7 +15,7 @@ public class Boulder : MonoBehaviour
         if(rb.velocity.magnitude >= 1f)
         {
             I_HitableObj hit = col.gameObject.GetComponent<I_HitableObj>();
-            if(hit != null) { hit.TakeDmg(1); }
+            if(hit != null) { hit.TakeHit(1); }
         }
               
     }

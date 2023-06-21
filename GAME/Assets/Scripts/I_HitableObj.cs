@@ -1,4 +1,4 @@
 public interface I_HitableObj
 {
-    void TakeDmg(int dmg);
+    void TakeHit(int damage);
 }
