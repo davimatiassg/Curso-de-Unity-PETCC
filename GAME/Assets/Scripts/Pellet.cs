@@ -14,10 +14,10 @@ public class Pellet : MonoBehaviour
     public void OnCollisionEnter2D(Collision2D col)
     {
         I_HitableObj hit = col.gameObject.GetComponent<I_HitableObj>();
-        if(hit != null)
+        if(col.gameObject.tag != "Player")
         {
-            hit.TakeDmg(dmg);
+            Destroy(this.gameObject, 0.3f);
+            if(hit != null) { hit.TakeDmg(dmg); }      
         }
-        Destroy(this.gameObject, 0.3f);
     }
 }

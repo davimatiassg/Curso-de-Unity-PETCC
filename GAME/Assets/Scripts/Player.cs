@@ -68,6 +68,11 @@ public class Player : MonoBehaviour, I_HitableObj
     {   
         Hp -= dmg;
         Debug.Log("Player: levou dano ;-;");
+        if(Hp <= 0)
+        {
+            //Play Death Anim.
+            Destroy(this.gameObject, 2f); //provisório
+        }
     }
 
     public void shoot()
@@ -75,7 +80,7 @@ public class Player : MonoBehaviour, I_HitableObj
         GameObject shot = Instantiate(pellet);
         Pellet p = shot.GetComponent<Pellet>();
         p.trs.position = transform.TransformPoint(sling.localPosition);
-        p.rb.velocity = Vector2.right * p.speed * transform.localScale.x;
+        p.rb.velocity = new Vector2(1*p.speed * transform.localScale.x, 0.2f);
     }
 
 }

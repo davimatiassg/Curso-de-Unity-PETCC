@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, I_HitableObj
 {
     public GameObject Player;
+
+    private int hp = 1;
+
     private float velocidade = 3f;
     private float pulo = 25f;
     private int ataque = 1;
@@ -89,6 +92,16 @@ public class Enemy : MonoBehaviour
             Player.GetComponent<Player>().TakeDmg(ataque);
             tAtk = atkCd;
         }   
+    }
+
+    public void TakeDmg(int dmg)
+    {
+        hp-=dmg;
+        if(hp <= 0)
+        {
+            //Play death animation
+            Destroy(this.gameObject, 1f);
+        }
     }
 
 };
