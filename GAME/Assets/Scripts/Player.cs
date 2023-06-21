@@ -54,7 +54,7 @@ public class Player : MonoBehaviour, I_HitableObj
 
     private bool isOnGround()
     {
-        return Physics2D.OverlapCircle(floorCheck.position, 0.25f, solid);
+        return Physics2D.OverlapCircle(floorCheck.position, 0.5f, solid);
     }
 
     private void Flip()
@@ -79,8 +79,14 @@ public class Player : MonoBehaviour, I_HitableObj
     {
         GameObject shot = Instantiate(pellet);
         Pellet p = shot.GetComponent<Pellet>();
-        p.trs.position = transform.TransformPoint(sling.localPosition);
+        p.trs.position = (sling.position);
         p.rb.velocity = new Vector2(1*p.speed * transform.localScale.x, 0.2f);
+    }
+
+    public void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(1, 0, 0, 1f);
+        Gizmos.DrawWireSphere(floorCheck.position, 0.5f);
     }
 
 }
