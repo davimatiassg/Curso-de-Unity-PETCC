@@ -38,7 +38,7 @@ public class MenuPausar : MonoBehaviour
     }
     public void IrParaMenu(){
         Time.timeScale = 1; 
-        //UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
     }
     public void Opcoes(){
         // Toggle menu opções
