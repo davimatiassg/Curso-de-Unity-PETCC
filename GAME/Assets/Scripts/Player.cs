@@ -21,11 +21,11 @@ public class Player : MonoBehaviour, I_HitableObj
     [SerializeField] private float atkc = 0;
     [SerializeField] private GameObject pellet;
 
-
     //Colecionáveis
     [SerializeField] private Scorer sc;
 
-    
+    //Animação:
+    [SerializeField] private Animator anim;
 
     // Sons
     [SerializeField] AudioClip collectSound;
@@ -35,6 +35,7 @@ public class Player : MonoBehaviour, I_HitableObj
     //Start called when the scene is initiated.
     void Start()
     {
+        anim = this.gameObject.GetComponent<Animator>();
         sc.UpdateLives(Hp);
         sc.AddScore(0);
     }
@@ -49,6 +50,7 @@ public class Player : MonoBehaviour, I_HitableObj
             rb.velocity = new Vector2(rb.velocity.x, jump);
         }
 
+
         if(hAxis != 0)
         {
             Flip();
@@ -59,8 +61,11 @@ public class Player : MonoBehaviour, I_HitableObj
         if (Input.GetButtonDown("Fire1") && atkc <= 0)
         {
             Shoot();
+            anim.Play("Attack");
             atkc = atkCd;
         }
+        anim.SetBool("OnGround", IsOnGround());
+        anim.SetBool("Moving", hAxis != 0);
 
     }
 
