@@ -45,7 +45,7 @@ public class Player : MonoBehaviour, I_HitableObj
     {
         hAxis = Input.GetAxisRaw("Horizontal");
 
-        if (Input.GetButtonDown("Jump") && IsOnGround())
+        if (Input.GetButton("Jump") && IsOnGround())
         {
             rb.velocity = new Vector2(rb.velocity.x, jump);
         }
@@ -77,14 +77,14 @@ public class Player : MonoBehaviour, I_HitableObj
     public void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color(1, 0, 0, 1f);
-        Gizmos.DrawWireSphere(floorCheck.position, 0.5f);
+        Gizmos.DrawWireSphere(floorCheck.position, 0.2f);
     }
 
 
     /// Métodos de controle das ações:
     private bool IsOnGround()
     {
-        return Physics2D.OverlapCircle(floorCheck.position, 0.5f, solid);
+        return Physics2D.OverlapCircle(floorCheck.position, 0.2f, solid);
     }
 
     private void Flip()
