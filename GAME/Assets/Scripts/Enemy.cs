@@ -14,7 +14,6 @@ public class Enemy : MonoBehaviour, I_HitableObj
 
     private float disMax = 8f;
     private float disMin = 1.1f;
-    private float disAtk = 1.1f;
     private float disJump = 1.6f;
 
     private float jumpCd = 1.5f;
