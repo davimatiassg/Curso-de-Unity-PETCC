@@ -866,7 +866,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 274440491}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 30.9, y: -2.92, z: 0}
+  m_LocalPosition: {x: -18.3, y: -2.92, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -887,9 +887,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 329bc702486d43a4cb1e8ee06aeb14fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 6
+  Hp: 10
   speed: 10
   jump: 20
+  inv_time: 3
   solid:
     serializedVersion: 2
     m_Bits: 64
@@ -901,6 +902,7 @@ MonoBehaviour:
   pellet: {fileID: 4298024183812115514, guid: 1419261f4d38c0a4b920bec0183de711, type: 3}
   sc: {fileID: 409894051}
   anim: {fileID: 0}
+  spr: {fileID: 0}
   collectSound: {fileID: 0}
 --- !u!61 &274440495
 BoxCollider2D:
@@ -2366,7 +2368,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7380141361080332773, guid: be0ac6f5d1e6fdaa9aadc941e8ecf764, type: 3}
       propertyPath: scoreBonus
-      value: -2550
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8909577017898544072, guid: be0ac6f5d1e6fdaa9aadc941e8ecf764, type: 3}
       propertyPath: m_Sprite
@@ -8382,7 +8384,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6359865997701305008, guid: 51a2516ab56907146b2a1b222e4cc512, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 55.8222
+      value: 55.7776
       objectReference: {fileID: 0}
     - target: {fileID: 6359865997701305008, guid: 51a2516ab56907146b2a1b222e4cc512, type: 3}
       propertyPath: m_LocalPosition.y
@@ -8422,7 +8424,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6359865997701305009, guid: 51a2516ab56907146b2a1b222e4cc512, type: 3}
       propertyPath: m_Size.x
-      value: 23.638187
+      value: 23.727306
       objectReference: {fileID: 0}
     - target: {fileID: 6359865997701305009, guid: 51a2516ab56907146b2a1b222e4cc512, type: 3}
       propertyPath: m_Size.y

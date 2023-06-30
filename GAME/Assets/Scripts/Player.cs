@@ -9,6 +9,8 @@ public class Player : MonoBehaviour, I_HitableObj
     [SerializeField] private int Hp = 5;
     [SerializeField] private float speed = 10f;
     [SerializeField] private float jump = 20f;
+    [SerializeField] private float inv_time = 3f;
+    private float invt = 0;
 
     //Estado:
     private bool playable = true;
@@ -30,7 +32,7 @@ public class Player : MonoBehaviour, I_HitableObj
 
     //Animação:
     [SerializeField] private Animator anim;
-
+    [SerializeField] private SpriteRenderer spr;
     // Sons
     [SerializeField] AudioClip collectSound;
 
@@ -40,6 +42,7 @@ public class Player : MonoBehaviour, I_HitableObj
     void Start()
     {
         anim = this.gameObject.GetComponent<Animator>();
+        spr = this.gameObject.GetComponent<SpriteRenderer>();
         sc.UpdateLives(Hp);
         sc.AddScore(0);
     }
@@ -70,6 +73,14 @@ public class Player : MonoBehaviour, I_HitableObj
                 Shoot();
                 anim.Play("Attack");
                 atkc = atkCd;
+            }
+
+            //Invencibilidade após receber dano
+            if(invt > 0)
+            { 
+                invt -= Time.deltaTime; 
+                spr.color = Color.white * (Mathf.PingPong(15*Time.time, 1) + 0.3f);
+                if(invt <= 0) { spr.color = Color.white; }
             }
 
             //Animação
@@ -126,8 +137,9 @@ public class Player : MonoBehaviour, I_HitableObj
     //Receber dano
     public void TakeHit(int dmg)
     {   
-        if(playable)
+        if(playable && invt <= 0)
         {
+            invt = inv_time;
             playable = false;
             anim.Play("Hurt");
             Hp -= dmg;
