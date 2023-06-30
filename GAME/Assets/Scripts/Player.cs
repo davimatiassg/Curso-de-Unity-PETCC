@@ -126,15 +126,19 @@ public class Player : MonoBehaviour, I_HitableObj
     //Receber dano
     public void TakeHit(int dmg)
     {   
-        playable = false;
-        anim.Play("Hurt");
-        Hp -= dmg;
-        sc.UpdateLives(Hp);
-        if(Hp <= 0)
+        if(playable)
         {
-            //Play Death Anim.
-            Destroy(this.gameObject, 2f); //provisório
+            playable = false;
+            anim.Play("Hurt");
+            Hp -= dmg;
+            sc.UpdateLives(Hp);
+            if(Hp <= 0)
+            {
+                //Play Death Anim.
+                Destroy(this.gameObject, 2f); //provisório
+            }
         }
+        
     }
 
     //Coletar um item

@@ -11,7 +11,7 @@ public class Speleothem : MonoBehaviour, I_HitableObj
 
     private Rigidbody2D rb;
 
-    private float timeToLock = 0.5f;
+    private float timeToLock = 0.25f;
 
     Vector2 ray_angle = Quaternion.AngleAxis(-20f, Vector3.forward) * Vector2.down ;
     bool alreadyHit = false;

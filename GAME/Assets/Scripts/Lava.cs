@@ -5,6 +5,8 @@ using UnityEngine;
 public class Lava : MonoBehaviour
 {
     private BoxCollider2D col;
+    private SpriteRenderer spr;
+    [SerializeField] private Transform lavaTop;
 
     static public float tJatoIntervalo = 4f;
     static private float tJato = 2f;
@@ -17,7 +19,12 @@ public class Lava : MonoBehaviour
     void Start()
     {
         col = GetComponent<BoxCollider2D>();
-        altura = transform.localScale.y;
+        spr = GetComponent<SpriteRenderer>();
+        lavaTop.gameObject.GetComponent<SpriteRenderer>().size = Vector2.right * spr.size.x + Vector2.up * 0.5f;
+        altura = spr.size.y;
+        lavaTop.localPosition = Vector2.up* (0.75f + altura/4);
+        col.size = spr.size;
+        
     }
 
     // Update is called once per frame
@@ -38,8 +45,10 @@ public class Lava : MonoBehaviour
                     float r = jatoCd/tJato;
                     float jatoH = 10f*(r < 0.5 ? r : 1 - r);
 
-                    col.size = new Vector2(1f, 1f + jatoH);
-                    transform.localScale = new Vector2(transform.localScale.x, altura * (1f + jatoH));
+                    
+                    lavaTop.localPosition = new Vector2(0f, 0.75f + jatoH/2f);
+                    spr.size = new Vector2(spr.size.x, altura * (1f + jatoH));
+                    col.size = spr.size;
 
                     jatoCd -= Time.deltaTime;
                 }
@@ -55,7 +64,14 @@ public class Lava : MonoBehaviour
     public void OnTriggerEnter2D(Collider2D col)
     {
         I_HitableObj hit = col.gameObject.GetComponent<I_HitableObj>();
-        if(hit != null) { hit.TakeHit(2); }
+        if(hit != null) { 
+            hit.TakeHit(2);
+            Rigidbody2D hit_rb = col.attachedRigidbody;
+            if(hit_rb != null)
+            {
+                hit_rb.velocity = new Vector2(0, 30f);
+            }
+        }
     }
 
 }
