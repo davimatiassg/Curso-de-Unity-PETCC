@@ -6,11 +6,11 @@ public class Enemy : MonoBehaviour, I_HitableObj
 {
     public GameObject Player;
 
-    private int hp = 1;
+    [SerializeField] private int hp = 1;
 
-    private float speed = 3f;
-    private float jump = 25f;
-    private int atkDmg = 1;
+    [SerializeField] private float speed = 3f;
+    [SerializeField] private float jump = 25f;
+    [SerializeField] private int atkDmg = 1;
 
     private float disMax = 8f;
     private float disMin = 1.1f;
@@ -40,6 +40,16 @@ public class Enemy : MonoBehaviour, I_HitableObj
         {
             /// Persegue o Player
             rb.velocity = new Vector2((Mathf.Sign(pDir.x)) * speed, rb.velocity.y);
+            /// Jump
+            if (tJump > 0){ tJump -= Time.deltaTime;}
+            if (IsOnGround())
+            {
+                if (pDir.y > disJump && tJump <= 0)
+                {
+                    rb.velocity = new Vector2(rb.velocity.x, jump);
+                    tJump = jumpCd;
+                }
+            }
         }
         else
         {
@@ -47,16 +57,6 @@ public class Enemy : MonoBehaviour, I_HitableObj
             rb.velocity = new Vector2(0f, rb.velocity.y);
         }
 
-        /// Jump
-        if (tJump > 0){ tJump -= Time.deltaTime;}
-        if (IsOnGround())
-        {
-            if (pDir.y > disJump && tJump <= 0)
-            {
-                rb.velocity = new Vector2(rb.velocity.x, jump);
-                tJump = jumpCd;
-            }
-        }
     }
 
     private bool IsOnGround()

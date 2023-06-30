@@ -5,9 +5,13 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, I_HitableObj
 {
+    // Atributos
     [SerializeField] private int Hp = 5;
     [SerializeField] private float speed = 10f;
     [SerializeField] private float jump = 20f;
+
+    //Estado:
+    private bool playable = true;
 
     //Movimentação
     private float hAxis;
@@ -43,37 +47,48 @@ public class Player : MonoBehaviour, I_HitableObj
     // Update is called once per frame
     void Update()
     {
-        hAxis = Input.GetAxisRaw("Horizontal");
-
-        if (Input.GetButton("Jump") && IsOnGround())
+        // Se o jogador estiver podendo se mover:
+        if(playable)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jump);
-        }
+            //Recebe o input do usuário e vira o player na direção certa
+            hAxis = Input.GetAxisRaw("Horizontal");
+            if(hAxis != 0)
+            {
+                Flip();
+            }
+            
+            //Pulo
+            if (Input.GetButton("Jump") && IsOnGround())
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jump);
+            }
 
+            //Ataque
+            if(atkc > 0) { atkc -= Time.deltaTime; }
+            if (Input.GetButtonDown("Fire1") && atkc <= 0)
+            {
+                Shoot();
+                anim.Play("Attack");
+                atkc = atkCd;
+            }
 
-        if(hAxis != 0)
-        {
-            Flip();
+            //Animação
+            anim.SetBool("OnGround", IsOnGround());
+            anim.SetBool("Moving", hAxis != 0);
         }
-        
-
-        if(atkc > 0) { atkc -= Time.deltaTime; }
-        if (Input.GetButtonDown("Fire1") && atkc <= 0)
-        {
-            Shoot();
-            anim.Play("Attack");
-            atkc = atkCd;
-        }
-        anim.SetBool("OnGround", IsOnGround());
-        anim.SetBool("Moving", hAxis != 0);
 
     }
 
     private void FixedUpdate()
     {
-        rb.velocity = new Vector2(hAxis * speed, rb.velocity.y);
+        //Movimentação
+        if(playable)
+        {
+            rb.velocity = new Vector2(hAxis * speed, rb.velocity.y);
+        }
     }
 
+    //Linhas de auxílio (somente no editor do Unity)
     public void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color(1, 0, 0, 1f);
@@ -81,12 +96,15 @@ public class Player : MonoBehaviour, I_HitableObj
     }
 
 
-    /// Métodos de controle das ações:
+    /// ** Métodos de controle das ações:
+
+    // Se o jogador está no chão
     private bool IsOnGround()
     {
         return Physics2D.OverlapCircle(floorCheck.position, 0.2f, solid);
     }
 
+    // Virar o player para a direção certa
     private void Flip()
     {
         Vector3 scale = transform.localScale;
@@ -94,6 +112,7 @@ public class Player : MonoBehaviour, I_HitableObj
         transform.localScale = scale;
     }
 
+    // Disparar um projétil
     public void Shoot()
     {
         GameObject shot = Instantiate(pellet);
@@ -107,6 +126,8 @@ public class Player : MonoBehaviour, I_HitableObj
     //Receber dano
     public void TakeHit(int dmg)
     {   
+        playable = false;
+        anim.Play("Hurt");
         Hp -= dmg;
         sc.UpdateLives(Hp);
         if(Hp <= 0)
@@ -121,12 +142,11 @@ public class Player : MonoBehaviour, I_HitableObj
         // Toca o som de coleta e destroi o objeto
         GetComponent<AudioSource>().PlayOneShot(collectSound);
         sc.AddScore(scoreBonus);
+    }
 
-        // Adiciona 50 score por coin coletada
-
-
-        
-
+    //Entregar o controle do player de volta ao usuário.
+    public void makePlayable(){
+        playable = true;
     }
 
 
