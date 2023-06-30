@@ -22,8 +22,7 @@ public class Lava : MonoBehaviour
         spr = GetComponent<SpriteRenderer>();
         lavaTop.gameObject.GetComponent<SpriteRenderer>().size = Vector2.right * spr.size.x + Vector2.up * 0.5f;
         altura = spr.size.y;
-        lavaTop.localPosition = Vector2.up* (0.75f + altura/4);
-        col.size = spr.size;
+        lavaTop.localPosition = Vector2.up * (0.25f + (spr.size.y * 0.5f));
         
     }
 
@@ -46,9 +45,9 @@ public class Lava : MonoBehaviour
                     float jatoH = 10f*(r < 0.5 ? r : 1 - r);
 
                     
-                    lavaTop.localPosition = new Vector2(0f, 0.75f + jatoH/2f);
+                    
                     spr.size = new Vector2(spr.size.x, altura * (1f + jatoH));
-                    col.size = spr.size;
+                    lavaTop.localPosition = Vector2.up * (0.25f + (spr.size.y * 0.5f));
 
                     jatoCd -= Time.deltaTime;
                 }
