@@ -12,29 +12,44 @@ public class Player : MonoBehaviour, I_HitableObj
     [SerializeField] private float inv_time = 3f;
     private float invt = 0;
 
-    //Estado:
+    // Estado:
     private bool playable = true;
 
-    //Movimentação
+    // Movimentação
     private float hAxis;
     [SerializeField] private LayerMask solid;
     [SerializeField] private Transform floorCheck;
     [SerializeField] private Rigidbody2D rb;
 
-    //Ataque     
+    // Ataque     
     [SerializeField] private Transform sling;
     [SerializeField] private float atkCd = 0.25f;
     [SerializeField] private float atkc = 0;
     [SerializeField] private GameObject pellet;
 
-    //Colecionáveis
+    // Colecionáveis
     [SerializeField] private Scorer sc;
 
-    //Animação:
+    // Animação:
     [SerializeField] private Animator anim;
     [SerializeField] private SpriteRenderer spr;
     // Sons
     [SerializeField] AudioClip collectSound;
+    [SerializeField] AudioClip stepSound;
+    
+    // Mds o_o
+    public struct audioTuple
+    {
+        public float time;
+        public AudioClip clip;
+
+        public audioTuple(float time_,AudioClip clip_)
+        {
+            time = time_;
+            clip = clip_;
+        }
+    }
+    public List<audioTuple> audioQueue = new List<audioTuple>();
 
 
     /// Métodos da Unity:
@@ -96,6 +111,7 @@ public class Player : MonoBehaviour, I_HitableObj
         if(playable)
         {
             rb.velocity = new Vector2(hAxis * speed, rb.velocity.y);
+            if (Input.GetAxisRaw("Horizontal") != 0) playSoundContinuously(stepSound);
         }
     }
 
@@ -165,6 +181,35 @@ public class Player : MonoBehaviour, I_HitableObj
         playable = true;
     }
 
+
+    public void playSoundContinuously(AudioClip clip)
+    {
+        bool newClip = true;
+
+        for (int i = 0;i < audioQueue.Count;i ++)
+        {
+            if (audioQueue[i].clip == clip)
+            {
+                newClip = false;
+            }
+
+            if (audioQueue[i].time <= 0)
+            { // O tempo restante do clip acabou -> removendo o clip da lista
+                audioQueue.RemoveAt(i);
+                i --;
+            }
+            else { // Diminuindo o tempo restante
+                audioQueue[i] = new audioTuple(audioQueue[i].time - Time.deltaTime, audioQueue[i].clip);
+            }
+        }
+
+        if (newClip)
+        {
+            audioQueue.Add(new audioTuple(clip.length, clip));
+            GetComponent<AudioSource>().PlayOneShot(clip);
+        }
+
+    }
 
 
 }
