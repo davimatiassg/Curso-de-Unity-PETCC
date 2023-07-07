@@ -36,21 +36,7 @@ public class Player : MonoBehaviour, I_HitableObj
     // Sons
     [SerializeField] AudioClip collectSound;
     [SerializeField] AudioClip stepSound;
-    
-    // Mds o_o
-    public struct audioTuple
-    {
-        public float time;
-        public AudioClip clip;
-
-        public audioTuple(float time_,AudioClip clip_)
-        {
-            time = time_;
-            clip = clip_;
-        }
-    }
-    public List<audioTuple> audioQueue = new List<audioTuple>();
-
+    [SerializeField] AudioClip hurtSound;
 
     /// Métodos da Unity:
     //Start called when the scene is initiated.
@@ -68,20 +54,20 @@ public class Player : MonoBehaviour, I_HitableObj
         // Se o jogador estiver podendo se mover:
         if(playable)
         {
-            //Recebe o input do usuário e vira o player na direção certa
+            // Recebe o input do usuário e vira o player na direção certa
             hAxis = Input.GetAxisRaw("Horizontal");
             if(hAxis != 0)
             {
                 Flip();
             }
             
-            //Pulo
+            // Pulo
             if (Input.GetButton("Jump") && IsOnGround())
             {
                 rb.velocity = new Vector2(rb.velocity.x, jump);
             }
 
-            //Ataque
+            // Ataque
             if(atkc > 0) { atkc -= Time.deltaTime; }
             if (Input.GetButtonDown("Fire1") && atkc <= 0)
             {
@@ -90,7 +76,7 @@ public class Player : MonoBehaviour, I_HitableObj
                 atkc = atkCd;
             }
 
-            //Invencibilidade após receber dano
+            // Invencibilidade após receber dano
             if(invt > 0)
             { 
                 invt -= Time.deltaTime; 
@@ -98,7 +84,7 @@ public class Player : MonoBehaviour, I_HitableObj
                 if(invt <= 0) { spr.color = Color.white; }
             }
 
-            //Animação
+            // Animação
             anim.SetBool("OnGround", IsOnGround());
             anim.SetBool("Moving", hAxis != 0);
         }
@@ -107,15 +93,15 @@ public class Player : MonoBehaviour, I_HitableObj
 
     private void FixedUpdate()
     {
-        //Movimentação
+        // Movimentação
         if(playable)
         {
             rb.velocity = new Vector2(hAxis * speed, rb.velocity.y);
-            if (Input.GetAxisRaw("Horizontal") != 0) playSoundContinuously(stepSound);
+            //if (Input.GetAxisRaw("Horizontal") != 0) GetComponent<sfxScript>().playSoundContinuously(stepSound);
         }
     }
 
-    //Linhas de auxílio (somente no editor do Unity)
+    // Linhas de auxílio (somente no editor do Unity)
     public void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color(1, 0, 0, 1f);
@@ -150,66 +136,40 @@ public class Player : MonoBehaviour, I_HitableObj
 
     /// Métodos chamados por outros scripts:
 
-    //Receber dano
+    // Receber dano
     public void TakeHit(int dmg)
     {   
         if(playable && invt <= 0)
         {
             invt = inv_time;
             playable = false;
-            anim.Play("Hurt");
+
             Hp -= dmg;
             sc.UpdateLives(Hp);
+
             if(Hp <= 0)
             {
-                //Play Death Anim.
+                // Play Death Anim.
                 Destroy(this.gameObject, 2f); //provisório
             }
+
+            anim.Play("Hurt");
+            GetComponent<AudioSource>().PlayOneShot(hurtSound);
+
         }
         
     }
 
-    //Coletar um item
+    // Coletar um item
     public void Collect(int scoreBonus = 0){
         // Toca o som de coleta e destroi o objeto
         GetComponent<AudioSource>().PlayOneShot(collectSound);
         sc.AddScore(scoreBonus);
     }
 
-    //Entregar o controle do player de volta ao usuário.
+    // Entregar o controle do player de volta ao usuário.
     public void makePlayable(){
         playable = true;
     }
-
-
-    public void playSoundContinuously(AudioClip clip)
-    {
-        bool newClip = true;
-
-        for (int i = 0;i < audioQueue.Count;i ++)
-        {
-            if (audioQueue[i].clip == clip)
-            {
-                newClip = false;
-            }
-
-            if (audioQueue[i].time <= 0)
-            { // O tempo restante do clip acabou -> removendo o clip da lista
-                audioQueue.RemoveAt(i);
-                i --;
-            }
-            else { // Diminuindo o tempo restante
-                audioQueue[i] = new audioTuple(audioQueue[i].time - Time.deltaTime, audioQueue[i].clip);
-            }
-        }
-
-        if (newClip)
-        {
-            audioQueue.Add(new audioTuple(clip.length, clip));
-            GetComponent<AudioSource>().PlayOneShot(clip);
-        }
-
-    }
-
 
 }

@@ -27,6 +27,9 @@ public class Enemy : MonoBehaviour, I_HitableObj
 
     private Rigidbody2D rb;
 
+    [SerializeField] AudioClip stepSound;
+    [SerializeField] AudioClip hurtSound;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -40,6 +43,7 @@ public class Enemy : MonoBehaviour, I_HitableObj
         {
             /// Persegue o Player
             rb.velocity = new Vector2((Mathf.Sign(pDir.x)) * speed, rb.velocity.y);
+            GetComponent<sfxScript>().playSoundContinuously(stepSound);
             /// Jump
             if (tJump > 0){ tJump -= Time.deltaTime;}
             if (IsOnGround())
@@ -93,12 +97,14 @@ public class Enemy : MonoBehaviour, I_HitableObj
 
     public void TakeHit(int dmg)
     {
-        hp-=dmg;
+        hp -= dmg;
         if(hp <= 0)
         {
             //Play death animation
             Destroy(this.gameObject, 1f);
         }
+
+        GetComponent<AudioSource>().PlayOneShot(hurtSound);
     }
 
 };
