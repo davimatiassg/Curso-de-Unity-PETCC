@@ -9,12 +9,15 @@ public class Speleothem : MonoBehaviour, I_HitableObj
     [SerializeField] private Collider2D HitBox;
     [SerializeField] private Collider2D PlaceBox;
 
+    [SerializeField] AudioClip stalactiteFall;
+
     private Rigidbody2D rb;
 
     private float timeToLock = 0.25f;
 
     Vector2 ray_angle = Quaternion.AngleAxis(-20f, Vector3.forward) * Vector2.down ;
     bool alreadyHit = false;
+    bool fell = false;
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +36,8 @@ public class Speleothem : MonoBehaviour, I_HitableObj
             {
                 //Chama o método de receber dano. Acontece que ele simplesmente faz a estalactite cair.
                 TakeHit(0);
+                if (!fell) GetComponent<AudioSource>().PlayOneShot(stalactiteFall);
+                fell = true;
             }
         }
         

@@ -33,10 +33,13 @@ public class Player : MonoBehaviour, I_HitableObj
     // Animação:
     [SerializeField] private Animator anim;
     [SerializeField] private SpriteRenderer spr;
+
     // Sons
     [SerializeField] AudioClip collectSound;
     [SerializeField] AudioClip stepSound;
+    [SerializeField] AudioClip jumpSound;
     [SerializeField] AudioClip hurtSound;
+    [SerializeField] AudioClip pelletSound;
 
     /// Métodos da Unity:
     //Start called when the scene is initiated.
@@ -65,6 +68,7 @@ public class Player : MonoBehaviour, I_HitableObj
             if (Input.GetButton("Jump") && IsOnGround())
             {
                 rb.velocity = new Vector2(rb.velocity.x, jump);
+                //GetComponent<AudioSource>().PlayOneShot(jumpSound);
             }
 
             // Ataque
@@ -132,6 +136,8 @@ public class Player : MonoBehaviour, I_HitableObj
         Pellet p = shot.GetComponent<Pellet>();
         p.trs.position = (sling.position);
         p.rb.velocity = new Vector2(1*p.speed * transform.localScale.x, 0.2f);
+
+        GetComponent<AudioSource>().PlayOneShot(pelletSound);
     }
 
     /// Métodos chamados por outros scripts:

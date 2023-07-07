@@ -12,15 +12,15 @@ public class Enemy : MonoBehaviour, I_HitableObj
     [SerializeField] private float jump = 25f;
     [SerializeField] private int atkDmg = 1;
 
-    private float disMax = 8f;
-    private float disMin = 1.1f;
+    private float disMax = 12f;
+    private float disMin = 1.3f;
     private float disJump = 1.6f;
 
-    private float jumpCd = 1.5f;
+    static private float jumpCd = 1.5f;
     private float tJump = 0;
     
-    private float atkCd = 1.5f;
-    private float tAtk = 1.5f;
+    static private float atkCd = 0.5f;
+    private float tAtk = 0;
 
     [SerializeField] private Transform floorChk;
     [SerializeField] private LayerMask solid;
@@ -29,6 +29,7 @@ public class Enemy : MonoBehaviour, I_HitableObj
 
     [SerializeField] AudioClip stepSound;
     [SerializeField] AudioClip hurtSound;
+    [SerializeField] AudioClip dyingSound;
 
     void Start()
     {
@@ -88,7 +89,7 @@ public class Enemy : MonoBehaviour, I_HitableObj
     void AttackPlayer()
     {
         tAtk -= Time.deltaTime;  
-        if (tAtk<=0)
+        if (tAtk <= 0)
         {
             Player.GetComponent<Player>().TakeHit(atkDmg);
             tAtk = atkCd;
@@ -101,6 +102,8 @@ public class Enemy : MonoBehaviour, I_HitableObj
         if(hp <= 0)
         {
             //Play death animation
+            GetComponent<AudioSource>().PlayOneShot(dyingSound);
+            GetComponent<AudioSource>().PlayDelayed(0.75f);
             Destroy(this.gameObject, 1f);
         }
 

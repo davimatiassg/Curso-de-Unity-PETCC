@@ -7,6 +7,8 @@ public class Pellet : MonoBehaviour
     public float speed;
     [SerializeField] private int dmg;
 
+    [SerializeField] AudioClip pelletHitSound;
+
     public Rigidbody2D rb;
     public Transform trs;
 
@@ -19,5 +21,7 @@ public class Pellet : MonoBehaviour
             Destroy(this.gameObject, 0.3f);
             if(hit != null) { hit.TakeHit(dmg); }      
         }
+
+        GetComponent<AudioSource>().PlayOneShot(pelletHitSound);
     }
 }
