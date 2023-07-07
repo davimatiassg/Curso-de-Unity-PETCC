@@ -68,7 +68,7 @@ public class Player : MonoBehaviour, I_HitableObj
             if (Input.GetButton("Jump") && IsOnGround())
             {
                 rb.velocity = new Vector2(rb.velocity.x, jump);
-                //GetComponent<AudioSource>().PlayOneShot(jumpSound);
+                //GetComponent<AudioSource>().PlayOneShot(jumpSound); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             }
 
             // Ataque
@@ -100,8 +100,8 @@ public class Player : MonoBehaviour, I_HitableObj
         // Movimentação
         if(playable)
         {
-            rb.velocity = new Vector2(hAxis * speed, rb.velocity.y);
-            //if (Input.GetAxisRaw("Horizontal") != 0) GetComponent<sfxScript>().playSoundContinuously(stepSound);
+            rb.velocity = new Vector2(hAxis * speed, rb.velocity.y); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (a linha de baixo)
+            //if (Input.GetAxisRaw("Horizontal") != 0) GetComponent<sfxScript>().playSoundContinuously(stepSound); 
         }
     }
 

@@ -15,6 +15,9 @@ public class Lava : MonoBehaviour
 
     private float altura;
 
+    [SerializeField] AudioClip jatoLava;
+    bool jatoLavaOn = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,6 +37,7 @@ public class Lava : MonoBehaviour
             // O jato de lava parou; resetar os timers
             jatoIntervaloCd = tJatoIntervalo;
             jatoCd = tJato;
+            jatoLavaOn = false;
         }
         else {
             if (jatoIntervaloCd < 0)
@@ -41,10 +45,12 @@ public class Lava : MonoBehaviour
                 // Acabou o cooldown; lançando o jato de lava
                 if (jatoCd >= 0)
                 {
-                    float r = jatoCd/tJato;
-                    float jatoH = 10f*(r < 0.5 ? r : 1 - r);
+                    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+                    //if (!jatoLavaOn) GetComponent<AudioSource>().PlayOneShot(jatoLava);  // TORNAR LOCAL !!!!!!!!!!!
+                    jatoLavaOn = true;
 
-                    
+                    float r = jatoCd/tJato;
+                    float jatoH = 10f*(r < 0.5 ? r : 1 - r); 
                     
                     spr.size = new Vector2(spr.size.x, altura * (1f + jatoH));
                     lavaTop.localPosition = Vector2.up * (0.25f + (spr.size.y * 0.5f));

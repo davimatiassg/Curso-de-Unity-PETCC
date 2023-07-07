@@ -9,6 +9,15 @@ public class Boulder : MonoBehaviour
     public Rigidbody2D rb;
     public Transform trs;
 
+    [SerializeField] AudioClip roll;
+
+    public void Update()
+    {
+        if (rb.velocity.magnitude > 0)
+        {
+            //GetComponent<sfxScript>().playSoundContinuously(roll); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        }
+    }
 
     public void OnCollisionEnter2D(Collision2D col)
     {
@@ -19,4 +28,7 @@ public class Boulder : MonoBehaviour
         }
               
     }
+
+
+
 }
