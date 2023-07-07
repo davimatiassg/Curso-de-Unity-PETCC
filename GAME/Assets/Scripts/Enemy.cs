@@ -45,11 +45,15 @@ public class Enemy : MonoBehaviour, I_HitableObj
             /// Persegue o Player
             rb.velocity = new Vector2((Mathf.Sign(pDir.x)) * speed, rb.velocity.y);
             GetComponent<sfxScript>().playSoundContinuously(stepSound);
+
             /// Jump
             if (tJump > 0){ tJump -= Time.deltaTime;}
             if (IsOnGround())
             {
-                if (pDir.y > disJump && tJump <= 0)
+                RaycastHit2D ray = Physics2D.Raycast(transform.position, pDir, 1.25f);
+                bool obstacleAhead = ray.collider != null;
+
+                if ((Mathf.Abs(pDir.y) > disJump || obstacleAhead) && tJump <= 0)
                 {
                     rb.velocity = new Vector2(rb.velocity.x, jump);
                     tJump = jumpCd;
