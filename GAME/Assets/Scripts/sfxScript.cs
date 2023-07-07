@@ -20,7 +20,7 @@ public class sfxScript : MonoBehaviour
         }
     }
 
-    public void playSoundContinuously(AudioClip clip)
+    public void playSoundContinuously(AudioClip clip, float volume = 1f, float extratime = 0f)
     {
         bool newClip = true;
 
@@ -43,8 +43,8 @@ public class sfxScript : MonoBehaviour
 
         if (newClip)
         { // Adicionando um som novo a lista
-            audioQueue.Add(new audioTuple(clip.length, clip));
-            GetComponent<AudioSource>().PlayOneShot(clip);
+            audioQueue.Add(new audioTuple(clip.length + extratime, clip));
+            GetComponent<AudioSource>().PlayOneShot(clip, volume);
         }
 
     }

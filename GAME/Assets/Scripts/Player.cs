@@ -40,6 +40,7 @@ public class Player : MonoBehaviour, I_HitableObj
     [SerializeField] AudioClip jumpSound;
     [SerializeField] AudioClip hurtSound;
     [SerializeField] AudioClip pelletSound;
+    int justJumped = 0;
 
     /// Métodos da Unity:
     //Start called when the scene is initiated.
@@ -68,8 +69,15 @@ public class Player : MonoBehaviour, I_HitableObj
             if (Input.GetButton("Jump") && IsOnGround())
             {
                 rb.velocity = new Vector2(rb.velocity.x, jump);
-                //GetComponent<AudioSource>().PlayOneShot(jumpSound); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                justJumped ++;
+
+                if (justJumped == 0)
+                { // Só tocando o som em um novo pulo
+                    GetComponent<AudioSource>().PlayOneShot(jumpSound);
+                    justJumped ++;
+                }
             }
+            if (justJumped > 0) justJumped --;
 
             // Ataque
             if(atkc > 0) { atkc -= Time.deltaTime; }
@@ -101,7 +109,8 @@ public class Player : MonoBehaviour, I_HitableObj
         if(playable)
         {
             rb.velocity = new Vector2(hAxis * speed, rb.velocity.y); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (a linha de baixo)
-            //if (Input.GetAxisRaw("Horizontal") != 0) GetComponent<sfxScript>().playSoundContinuously(stepSound); 
+            if (Input.GetAxisRaw("Horizontal") != 0 && IsOnGround())
+            {GetComponent<sfxScript>().playSoundContinuously(stepSound, 0.5f);}
         }
     }
 

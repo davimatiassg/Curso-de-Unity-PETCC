@@ -13,9 +13,10 @@ public class Boulder : MonoBehaviour
 
     public void Update()
     {
-        if (rb.velocity.magnitude > 0)
+        if (rb.velocity.magnitude > 0.001)
         {
-            //GetComponent<sfxScript>().playSoundContinuously(roll); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //GetComponent<sfxScript>().playSoundContinuously(roll, 1f, 0.001f/rb.velocity.magnitude);
         }
     }
 

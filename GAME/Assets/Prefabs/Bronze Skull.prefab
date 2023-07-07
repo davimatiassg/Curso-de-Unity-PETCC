@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2577321207704856135}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.49, z: 0}
+  m_LocalPosition: {x: -0.062, y: -0.776, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -183,14 +183,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
   hp: 1
-  speed: 3
+  speed: 4
   jump: 25
   atkDmg: 1
   floorChk: {fileID: 2577321207704856134}
   solid:
     serializedVersion: 2
     m_Bits: 64
-  stepSound: {fileID: 8300000, guid: 7d0ddeff5c4df7949b0a5b98f5a47e1c, type: 3}
+  stepSound: {fileID: 8300000, guid: 527d3097e035dba449fcb1ff818a42ec, type: 3}
   hurtSound: {fileID: 8300000, guid: 11bf61655cb07d7419bd7be21a10bdce, type: 3}
   dyingSound: {fileID: 8300000, guid: 39a70509e23113b4e88a72c837ba0d0f, type: 3}
 --- !u!95 &2577321208384810444

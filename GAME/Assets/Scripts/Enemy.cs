@@ -44,7 +44,7 @@ public class Enemy : MonoBehaviour, I_HitableObj
         {
             /// Persegue o Player
             rb.velocity = new Vector2((Mathf.Sign(pDir.x)) * speed, rb.velocity.y);
-            GetComponent<sfxScript>().playSoundContinuously(stepSound);
+            if (IsOnGround()) GetComponent<sfxScript>().playSoundContinuously(stepSound, 0.5f);
 
             /// Jump
             if (tJump > 0){ tJump -= Time.deltaTime;}
@@ -66,11 +66,13 @@ public class Enemy : MonoBehaviour, I_HitableObj
             rb.velocity = new Vector2(0f, rb.velocity.y);
         }
 
+        bool legal = IsOnGround();
+
     }
 
     private bool IsOnGround()
     {
-        return Physics2D.OverlapCircle(floorChk.position, 0.25f, solid);
+        return Physics2D.OverlapCircle(floorChk.position, 0.01f, solid);
     }
 
     public void OnCollisionStay2D(Collision2D col)
@@ -102,16 +104,22 @@ public class Enemy : MonoBehaviour, I_HitableObj
 
     public void TakeHit(int dmg)
     {
-        hp -= dmg;
+        if (hp > 0)
+        {
+            GetComponent<AudioSource>().PlayOneShot(hurtSound);
+            hp -= dmg;
+        }
         if(hp <= 0)
         {
             //Play death animation
-            GetComponent<AudioSource>().PlayOneShot(dyingSound);
-            GetComponent<AudioSource>().PlayDelayed(0.75f);
+            Invoke("PlayDeathSound", 0.35f);
             Destroy(this.gameObject, 1f);
         }
+    }
 
-        GetComponent<AudioSource>().PlayOneShot(hurtSound);
+    public void PlayDeathSound()
+    {
+        GetComponent<AudioSource>().PlayOneShot(dyingSound, 0.5f);
     }
 
 };
