@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -4645872470107757156}
   - component: {fileID: 6264504607055991812}
   m_Layer: 6
-  m_Name: Circle
+  m_Name: Boulder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -117,10 +117,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cca09e833900eb439ba7c55888a5812, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dmg: 0
+  dmg: 1
   rb: {fileID: 7942846094721001816}
   trs: {fileID: 7942846094721005220}
-  roll: {fileID: 8300000, guid: bf659cdf040773e4caa0b108f88b0b99, type: 3}
+  roll: {fileID: 8300000, guid: 860464fd4a6891142beeabc34eb539e6, type: 3}
 --- !u!50 &7942846094721001816
 Rigidbody2D:
   serializedVersion: 4

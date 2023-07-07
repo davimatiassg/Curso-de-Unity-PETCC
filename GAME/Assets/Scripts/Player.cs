@@ -69,13 +69,12 @@ public class Player : MonoBehaviour, I_HitableObj
             if (Input.GetButton("Jump") && IsOnGround())
             {
                 rb.velocity = new Vector2(rb.velocity.x, jump);
-                justJumped ++;
-
                 if (justJumped == 0)
                 { // Só tocando o som em um novo pulo
                     GetComponent<AudioSource>().PlayOneShot(jumpSound);
                     justJumped ++;
                 }
+                justJumped ++;
             }
             if (justJumped > 0) justJumped --;
 
