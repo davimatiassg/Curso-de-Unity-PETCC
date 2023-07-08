@@ -19,7 +19,7 @@ public class Player : MonoBehaviour, I_HitableObj
     private float hAxis;
     [SerializeField] private LayerMask solid;
     [SerializeField] private Transform floorCheck;
-    [SerializeField] private Rigidbody2D rb;
+    private Rigidbody2D rb;
 
     // Ataque     
     [SerializeField] private Transform sling;
@@ -31,8 +31,8 @@ public class Player : MonoBehaviour, I_HitableObj
     [SerializeField] private Scorer sc;
 
     // Animação:
-    [SerializeField] private Animator anim;
-    [SerializeField] private SpriteRenderer spr;
+    private Animator anim;
+    private SpriteRenderer spr;
 
     // Sons
     [SerializeField] AudioClip collectSound;
@@ -40,6 +40,7 @@ public class Player : MonoBehaviour, I_HitableObj
     [SerializeField] AudioClip jumpSound;
     [SerializeField] AudioClip hurtSound;
     [SerializeField] AudioClip pelletSound;
+    AudioSource aud;
     int justJumped = 0;
 
     /// Métodos da Unity:
@@ -48,6 +49,8 @@ public class Player : MonoBehaviour, I_HitableObj
     {
         anim = this.gameObject.GetComponent<Animator>();
         spr = this.gameObject.GetComponent<SpriteRenderer>();
+        aud = this.gameObject.GetComponent<AudioSource>();
+        rb = this.gameObject.GetComponent<Rigidbody2D>();
         sc.UpdateLives(Hp);
         sc.AddScore(0);
     }
@@ -71,7 +74,7 @@ public class Player : MonoBehaviour, I_HitableObj
                 rb.velocity = new Vector2(rb.velocity.x, jump);
                 if (justJumped == 0)
                 { // Só tocando o som em um novo pulo
-                    GetComponent<AudioSource>().PlayOneShot(jumpSound);
+                    aud.PlayOneShot(jumpSound);
                     justJumped ++;
                 }
                 justJumped ++;
@@ -107,9 +110,7 @@ public class Player : MonoBehaviour, I_HitableObj
         // Movimentação
         if(playable)
         {
-            rb.velocity = new Vector2(hAxis * speed, rb.velocity.y); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (a linha de baixo)
-            if (Input.GetAxisRaw("Horizontal") != 0 && IsOnGround())
-            {GetComponent<sfxScript>().playSoundContinuously(stepSound, 0.5f);}
+            rb.velocity = new Vector2(hAxis * speed, rb.velocity.y);
         }
     }
 
@@ -145,10 +146,10 @@ public class Player : MonoBehaviour, I_HitableObj
         p.trs.position = (sling.position);
         p.rb.velocity = new Vector2(1*p.speed * transform.localScale.x, 0.2f);
 
-        GetComponent<AudioSource>().PlayOneShot(pelletSound);
+        aud.PlayOneShot(pelletSound);
     }
 
-    /// Métodos chamados por outros scripts:
+    /// ** Métodos chamados por outros scripts:
 
     // Receber dano
     public void TakeHit(int dmg)
@@ -168,7 +169,7 @@ public class Player : MonoBehaviour, I_HitableObj
             }
 
             anim.Play("Hurt");
-            GetComponent<AudioSource>().PlayOneShot(hurtSound);
+            aud.PlayOneShot(hurtSound);
 
         }
         
@@ -177,13 +178,20 @@ public class Player : MonoBehaviour, I_HitableObj
     // Coletar um item
     public void Collect(int scoreBonus = 0){
         // Toca o som de coleta e destroi o objeto
-        GetComponent<AudioSource>().PlayOneShot(collectSound);
+        aud.PlayOneShot(collectSound);
         sc.AddScore(scoreBonus);
     }
 
     // Entregar o controle do player de volta ao usuário.
     public void makePlayable(){
         playable = true;
+    }
+
+
+    // Efeitos sonoros
+    public void playStepSound()
+    {
+        aud.PlayOneShot(stepSound);
     }
 
 }
