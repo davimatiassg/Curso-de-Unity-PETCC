@@ -27,10 +27,8 @@ public class Scorer : MonoBehaviour
 
     public int UpdateLives(int hp){
         // Atualiza a UI com a quantidade de lifes
-        Debug.Log("atualizando vidas");
         for (int i = 0; i < transform.childCount; i++)
         {
-            Debug.Log(transform.GetChild(i));
             // Se o valor de i for menor que a quantidade de lifes Current, ativa a imagem da vida
             transform.GetChild(i).gameObject.SetActive(i < hp);
         }

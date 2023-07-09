@@ -22,7 +22,7 @@ public class Pellet : MonoBehaviour
             Destroy(this.gameObject, 0.15f);
             if(hit != null) 
             { 
-                hit.TakeHit(dmg); 
+                hit.TakeHit(dmg, col.GetContact(0).point); 
                 damaged = true;
             }     
             

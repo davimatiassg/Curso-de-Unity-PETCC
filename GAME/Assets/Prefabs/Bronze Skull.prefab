@@ -182,10 +182,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
-  hp: 1
-  speed: 4
-  jump: 25
+  hp: 2
+  hitVFX: {fileID: 4979629722934254568, guid: eda25f2fa15e17444b9da86fc78bb3e1, type: 3}
+  deathVFX: {fileID: 4979629722934254568, guid: 86066868dd430dd4cb303707ab4f7ca4, type: 3}
+  speed: 3
+  jump: 20
   atkDmg: 1
+  scale: 1
   floorChk: {fileID: 2577321207704856134}
   solid:
     serializedVersion: 2

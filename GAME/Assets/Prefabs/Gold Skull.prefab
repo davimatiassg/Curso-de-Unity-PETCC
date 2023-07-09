@@ -210,6 +210,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
   hp: 5
+  hitVFX: {fileID: 4979629722934254568, guid: eda25f2fa15e17444b9da86fc78bb3e1, type: 3}
+  deathVFX: {fileID: 4979629722934254568, guid: 86066868dd430dd4cb303707ab4f7ca4, type: 3}
   speed: 2
   jump: 5
   atkDmg: 1

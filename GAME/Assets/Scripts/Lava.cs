@@ -25,7 +25,7 @@ public class Lava : MonoBehaviour
     {
         col = GetComponent<BoxCollider2D>();
         spr = GetComponent<SpriteRenderer>();
-        aud = GetComponent<AudioSource>();
+        aud = lavaTop.gameObject.GetComponent<AudioSource>();
         lavaTop.gameObject.GetComponent<SpriteRenderer>().size = Vector2.right * spr.size.x + Vector2.up * 0.5f;
         altura = spr.size.y;
         lavaTop.localPosition = Vector2.up * (0.25f + (spr.size.y * 0.5f));
@@ -62,7 +62,7 @@ public class Lava : MonoBehaviour
                     lavaTop.localPosition = Vector2.up * (0.25f + (spr.size.y * 0.5f));
 
                     extrCd -= Time.deltaTime;
-                    aud.minDistance = spr.size.x;
+                    aud.minDistance = spr.size.x +10f;
                     aud.maxDistance = aud.minDistance +5f;
                 }
             }
@@ -78,7 +78,7 @@ public class Lava : MonoBehaviour
     {
         I_HitableObj hit = col.gameObject.GetComponent<I_HitableObj>();
         if(hit != null) { 
-            hit.TakeHit(2);
+            hit.TakeHit(3, GetComponent<Collider2D>().ClosestPoint(col.bounds.center));
             Rigidbody2D hit_rb = col.attachedRigidbody;
             if(hit_rb != null)
             {

@@ -8,6 +8,7 @@ public class Speleothem : MonoBehaviour, I_HitableObj
     [SerializeField] private GameObject player;
     [SerializeField] private Collider2D HitBox;
     [SerializeField] private Collider2D PlaceBox;
+    [SerializeField] private GameObject hitVFX;
 
     [SerializeField] AudioClip stalactiteFall;
 
@@ -35,7 +36,7 @@ public class Speleothem : MonoBehaviour, I_HitableObj
             if (ray.collider != null && ray.collider.gameObject == player)
             {
                 //Chama o método de receber dano. Acontece que ele simplesmente faz a estalactite cair.
-                TakeHit(0);
+                TakeHit(0, Vector2.zero);
                 if (!fell) GetComponent<AudioSource>().PlayOneShot(stalactiteFall);
                 fell = true;
             }
@@ -61,7 +62,7 @@ public class Speleothem : MonoBehaviour, I_HitableObj
         //Se puder...
         if(hit != null) 
         {
-            hit.TakeHit(2);     //Causa 2 pontos de dano
+            hit.TakeHit(2, GetComponent<Collider2D>().ClosestPoint(col.bounds.center));     //Causa 2 pontos de dano
             if(rb.velocity.y < -1) //Se estiver caindo...
             {
                 alreadyHit = true;  //Prepara para desativar a hitbox de dano no próximo frame.
@@ -95,10 +96,11 @@ public class Speleothem : MonoBehaviour, I_HitableObj
     }
 
     //Método de receber dano. Simplesmente fará a estalactite cair.
-    public void TakeHit(int dmg)
+    public void TakeHit(int damage, Vector2 hitPos)
     {
         if(!alreadyHit)
         {
+            Instantiate(hitVFX, hitPos, new Quaternion(0, 0, 0, 0));
             PlaceBox.enabled = false;
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
             rb.velocity = new Vector2(0, -12f);

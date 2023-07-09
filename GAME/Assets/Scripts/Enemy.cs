@@ -7,13 +7,15 @@ public class Enemy : MonoBehaviour, I_HitableObj
     public GameObject Player;
 
     [SerializeField] private int hp = 1;
+    [SerializeField] private GameObject hitVFX;
+    [SerializeField] private GameObject deathVFX;
 
     [SerializeField] private float speed = 3f;
     [SerializeField] private float jump = 25f;
     [SerializeField] private int atkDmg = 1;
     [SerializeField] private float scale = 1f;
 
-    private float disMax = 12f;
+    private float disMax = 8f;
     private float disMin = 1.3f;
     private float disJump = 1.6f;
 
@@ -39,6 +41,7 @@ public class Enemy : MonoBehaviour, I_HitableObj
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         aud = GetComponent<AudioSource>();
+        Player = GameObject.FindWithTag("Player");
         scale = transform.localScale.x;
     }
 
@@ -52,7 +55,6 @@ public class Enemy : MonoBehaviour, I_HitableObj
             rb.velocity = new Vector2((Mathf.Sign(pDir.x)) * speed, rb.velocity.y);
             anim.SetBool("Chase", true);
             transform.localScale = new Vector2(-Mathf.Sign(rb.velocity.x) * scale, scale);
-            if (IsOnGround()) GetComponent<sfxScript>().playSoundContinuously(stepSound, 0.5f);
 
             /// Jump
             if (tJump > 0){ tJump -= Time.deltaTime;}
@@ -107,23 +109,25 @@ public class Enemy : MonoBehaviour, I_HitableObj
         tAtk -= Time.deltaTime;  
         if (tAtk <= 0)
         {
-            Player.GetComponent<Player>().TakeHit(atkDmg);
+            Player.GetComponent<Player>().TakeHit(atkDmg, transform.position);
             tAtk = atkCd;
         }   
     }
 
-    public void TakeHit(int dmg)
+
+    public void TakeHit(int damage, Vector2 hitPos)
     {
         if (hp > 0)
         {
+            Instantiate(hitVFX, hitPos, new Quaternion(0, 0, 0, 0));
             GetComponent<AudioSource>().PlayOneShot(hurtSound);
-            hp -= dmg;
+            hp -= damage;
         }
         if(hp <= 0)
         {
+            Instantiate(deathVFX, transform.position, transform.rotation);
             //Play death animation
-            Invoke("PlayDeathSound", 0.35f);
-            Destroy(this.gameObject, 1f);
+            Destroy(this.gameObject, 0.10f);
         }
     }
 

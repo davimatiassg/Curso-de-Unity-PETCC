@@ -10,6 +10,7 @@ public class Player : MonoBehaviour, I_HitableObj
     [SerializeField] private float speed = 10f;
     [SerializeField] private float jump = 20f;
     [SerializeField] private float inv_time = 3f;
+
     private float invt = 0;
 
     // Estado:
@@ -42,6 +43,8 @@ public class Player : MonoBehaviour, I_HitableObj
     [SerializeField] AudioClip pelletSound;
     AudioSource aud;
     int justJumped = 0;
+    // Vfx
+    [SerializeField] private GameObject hitVFX;
 
     /// Métodos da Unity:
     //Start called when the scene is initiated.
@@ -152,20 +155,22 @@ public class Player : MonoBehaviour, I_HitableObj
     /// ** Métodos chamados por outros scripts:
 
     // Receber dano
-    public void TakeHit(int dmg)
+    public void TakeHit(int damage, Vector2 hitPos)
     {   
         if(playable && invt <= 0)
         {
             invt = inv_time;
             playable = false;
+            Instantiate(hitVFX, transform);
+            rb.velocity -= hitPos - (Vector2)transform.position;
 
-            Hp -= dmg;
+            Hp -= damage;
             sc.UpdateLives(Hp);
 
             if(Hp <= 0)
             {
                 // Play Death Anim.
-                Destroy(this.gameObject, 2f); //provisório
+                Destroy(this.gameObject, 1f); //provisório
             }
 
             anim.Play("Hurt");
