@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour, I_HitableObj
     [SerializeField] private float speed = 3f;
     [SerializeField] private float jump = 25f;
     [SerializeField] private int atkDmg = 1;
+    [SerializeField] private float scale = 1f;
 
     private float disMax = 12f;
     private float disMin = 1.3f;
@@ -19,13 +20,15 @@ public class Enemy : MonoBehaviour, I_HitableObj
     static private float jumpCd = 1.5f;
     private float tJump = 0;
     
-    static private float atkCd = 0.5f;
+    static private float atkCd = 0.25f;
     private float tAtk = 0;
 
     [SerializeField] private Transform floorChk;
     [SerializeField] private LayerMask solid;
 
     private Rigidbody2D rb;
+    private Animator anim;
+    private AudioSource aud;
 
     [SerializeField] AudioClip stepSound;
     [SerializeField] AudioClip hurtSound;
@@ -34,6 +37,9 @@ public class Enemy : MonoBehaviour, I_HitableObj
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        aud = GetComponent<AudioSource>();
+        scale = transform.localScale.x;
     }
 
     void Update()
@@ -44,6 +50,8 @@ public class Enemy : MonoBehaviour, I_HitableObj
         {
             /// Persegue o Player
             rb.velocity = new Vector2((Mathf.Sign(pDir.x)) * speed, rb.velocity.y);
+            anim.SetBool("Chase", true);
+            transform.localScale = new Vector2(-Mathf.Sign(rb.velocity.x) * scale, scale);
             if (IsOnGround()) GetComponent<sfxScript>().playSoundContinuously(stepSound, 0.5f);
 
             /// Jump
@@ -62,8 +70,10 @@ public class Enemy : MonoBehaviour, I_HitableObj
         }
         else
         {
+
             /// Fica parado
             rb.velocity = new Vector2(0f, rb.velocity.y);
+            anim.SetBool("Chase", false);
         }
 
         bool legal = IsOnGround();
@@ -119,7 +129,12 @@ public class Enemy : MonoBehaviour, I_HitableObj
 
     public void PlayDeathSound()
     {
-        GetComponent<AudioSource>().PlayOneShot(dyingSound, 0.5f);
+        aud.PlayOneShot(dyingSound, 0.5f);
+    }
+
+    public void PlayStepSound()
+    {
+        aud.PlayOneShot(stepSound, 0.5f);
     }
 
 };

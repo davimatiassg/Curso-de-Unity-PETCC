@@ -6,60 +6,68 @@ public class Lava : MonoBehaviour
 {
     private BoxCollider2D col;
     private SpriteRenderer spr;
+    private AudioSource aud;
     [SerializeField] private Transform lavaTop;
 
-    static public float tJatoIntervalo = 4f;
-    static private float tJato = 2f;
-    private float jatoIntervaloCd = tJatoIntervalo;
-    private float jatoCd = tJato;
+    public float tExtrWait = 4f;
+    private float extrWaitCd = 4f;
+
+    public float tExtr = 2f;
+    private float extrCd = 2f;
 
     private float altura;
 
-    [SerializeField] AudioClip jatoLava;
-    bool jatoLavaOn = false;
+    [SerializeField] AudioClip extrLava;
+    bool extrLavaOn = false;
 
     // Start is called before the first frame update
     void Start()
     {
         col = GetComponent<BoxCollider2D>();
         spr = GetComponent<SpriteRenderer>();
+        aud = GetComponent<AudioSource>();
         lavaTop.gameObject.GetComponent<SpriteRenderer>().size = Vector2.right * spr.size.x + Vector2.up * 0.5f;
         altura = spr.size.y;
         lavaTop.localPosition = Vector2.up * (0.25f + (spr.size.y * 0.5f));
+        aud.minDistance = spr.size.x;
+        aud.maxDistance = aud.minDistance +5f;
         
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (jatoIntervaloCd < 0 && jatoCd < 0)
+        if (extrWaitCd < 0 && extrCd < 0)
         {
-            // O jato de lava parou; resetar os timers
-            jatoIntervaloCd = tJatoIntervalo;
-            jatoCd = tJato;
-            jatoLavaOn = false;
+            // O extr de lava parou; resetar os timers
+            extrWaitCd = tExtrWait;
+            extrCd = tExtr;
+            extrLavaOn = false;
         }
         else {
-            if (jatoIntervaloCd < 0)
+            if (extrWaitCd < 0)
             {
-                // Acabou o cooldown; lançando o jato de lava
-                if (jatoCd >= 0)
+                // Acabou o cooldown; lançando o extr de lava
+                if (extrCd >= 0)
                 {
                     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
-                    //if (!jatoLavaOn) GetComponent<AudioSource>().PlayOneShot(jatoLava);  // TORNAR LOCAL !!!!!!!!!!!
-                    jatoLavaOn = true;
+                    if (!extrLavaOn) aud.PlayOneShot(extrLava);  // TORNAR LOCAL !!!!!!!!!!!
+                    extrLavaOn = true;
 
-                    float r = jatoCd/tJato;
-                    float jatoH = 10f*(r < 0.5 ? r : 1 - r); 
+
+                    float r = extrCd/tExtr;
+                    float extrH = 10f*(r < 0.5 ? r : 1 - r); 
                     
-                    spr.size = new Vector2(spr.size.x, altura * (1f + jatoH));
+                    spr.size = new Vector2(spr.size.x, altura * (1f + extrH));
                     lavaTop.localPosition = Vector2.up * (0.25f + (spr.size.y * 0.5f));
 
-                    jatoCd -= Time.deltaTime;
+                    extrCd -= Time.deltaTime;
+                    aud.minDistance = spr.size.x;
+                    aud.maxDistance = aud.minDistance +5f;
                 }
             }
             else {
-                jatoIntervaloCd -= Time.deltaTime;
+                extrWaitCd -= Time.deltaTime;
             }
 
         }
