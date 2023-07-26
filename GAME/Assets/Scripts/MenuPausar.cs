@@ -12,7 +12,7 @@ public class MenuPausar : MonoBehaviour
     [SerializeField] Slider volumeMusicaSlider;
     [SerializeField] Slider volumeEfeitosSlider;
     [SerializeField] AudioSource musica;
-    [SerializeField] AudioSource efeitos;
+    [SerializeField] List<AudioSource> sfx;
 
     private bool menuOpcoesAberto = false;
 
@@ -21,6 +21,15 @@ public class MenuPausar : MonoBehaviour
         // Carregar as configurações de volume atuais
         volumeMusicaSlider.value = PlayerPrefs.GetFloat("VolumeMusica", 1f);
         volumeEfeitosSlider.value = PlayerPrefs.GetFloat("VolumeEfeitos", 1f);
+        sfx = new List<AudioSource>(Object.FindObjectsByType<AudioSource>(FindObjectsSortMode.None));
+        foreach(AudioSource fx in sfx)
+        {
+            if(fx.GetInstanceID() == musica.GetInstanceID())
+            {
+                sfx.Remove(fx);
+                break;
+            }
+        }
     }
 
     public void PausarJogo(){
@@ -47,14 +56,29 @@ public class MenuPausar : MonoBehaviour
         menuEfeitosSlider.SetActive(menuOpcoesAberto);
     }
     public void SetVolumeMusica(){
-        // Atribuir o volume da música de fundo
+        // Atribuir o volume da músicza de fundo
         musica.volume = volumeMusicaSlider.value;
         // Salvar o volume da música de fundo
         PlayerPrefs.SetFloat("VolumeMusica", volumeMusicaSlider.value);
         PlayerPrefs.Save();
     }
     public void SetVolumeEfeitos(){
-        efeitos.volume = volumeEfeitosSlider.value;
+        List<AudioSource> destroyed = new List<AudioSource>();
+        foreach(AudioSource fx in sfx)
+        {
+            if(fx)
+            {
+                fx.volume = volumeEfeitosSlider.value;
+            }
+            else
+            {
+                destroyed.Add(fx);
+            }
+        }
+        foreach(AudioSource d in destroyed)
+        {
+            sfx.Remove(d);
+        }
         PlayerPrefs.SetFloat("VolumeEfeitos", volumeEfeitosSlider.value);
         PlayerPrefs.Save();
     }

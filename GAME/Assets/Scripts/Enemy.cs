@@ -15,8 +15,8 @@ public class Enemy : MonoBehaviour, I_HitableObj
     [SerializeField] private int atkDmg = 1;
     [SerializeField] private float scale = 1f;
 
-    private float disMax = 8f;
-    private float disMin = 1.3f;
+    private float disMax = 8.5f;
+    private float disMin = 0.5f;
     private float disJump = 1.6f;
 
     static private float jumpCd = 1.5f;

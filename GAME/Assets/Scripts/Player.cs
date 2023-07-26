@@ -169,8 +169,9 @@ public class Player : MonoBehaviour, I_HitableObj
 
             if(Hp <= 0)
             {
-                // Play Death Anim.
-                Destroy(this.gameObject, 1f); //provisório
+                playable = false;
+                spr.enabled = false;
+                GameObject.FindWithTag("SceneLoader").GetComponent<LevelManager>().ReloadLevel(1f);
             }
 
             anim.Play("Hurt");

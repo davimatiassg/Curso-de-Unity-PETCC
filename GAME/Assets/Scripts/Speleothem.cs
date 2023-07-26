@@ -25,6 +25,7 @@ public class Speleothem : MonoBehaviour, I_HitableObj
     {
         rb = GetComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        player = GameObject.FindWithTag("Player");
     }
 
     // Update is called once per frame
