@@ -72,14 +72,10 @@ public class Enemy : MonoBehaviour, I_HitableObj
         }
         else
         {
-
             /// Fica parado
             rb.velocity = new Vector2(0f, rb.velocity.y);
             anim.SetBool("Chase", false);
         }
-
-        bool legal = IsOnGround();
-
     }
 
     private bool IsOnGround()
