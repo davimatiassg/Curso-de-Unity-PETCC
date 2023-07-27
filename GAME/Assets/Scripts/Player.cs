@@ -110,6 +110,7 @@ public class Player : MonoBehaviour, I_HitableObj
 
     }
 
+    /// Fixed Update é chamado em intervalos de tempo constantes
     private void FixedUpdate()
     {
         /// Movimentação
