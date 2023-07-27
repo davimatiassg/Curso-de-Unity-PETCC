@@ -182,8 +182,8 @@ public class Player : MonoBehaviour, I_HitableObj
     }
 
     // Coletar um item
-    public void Collect(int scoreBonus = 0){
-        // Toca o som de coleta e destroi o objeto
+    public void Collect(int scoreBonus = 0) {
+        // Toca o som de coleta e adiciona os pontos ao score
         aud.PlayOneShot(collectSound);
         sc.AddScore(scoreBonus);
     }

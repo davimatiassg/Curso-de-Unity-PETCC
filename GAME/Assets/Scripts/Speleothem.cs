@@ -63,9 +63,9 @@ public class Speleothem : MonoBehaviour, I_HitableObj
         //Se puder...
         if(hit != null) 
         {
-            hit.TakeHit(2, GetComponent<Collider2D>().ClosestPoint(col.bounds.center));     //Causa 2 pontos de dano
             if(rb.velocity.y < -1) //Se estiver caindo...
             {
+                hit.TakeHit(2, GetComponent<Collider2D>().ClosestPoint(col.bounds.center));     //Causa 2 pontos de dano
                 alreadyHit = true;  //Prepara para desativar a hitbox de dano no próximo frame.
                 //Repele o objeto acertado para longe
                 Rigidbody2D hit_rb = col.attachedRigidbody;
@@ -74,6 +74,10 @@ public class Speleothem : MonoBehaviour, I_HitableObj
                     float direction = Mathf.Sign(col.transform.position.x - transform.position.x);
                     hit_rb.velocity = new Vector2(direction*5f, 10f);
                 }
+            }
+            else {
+                // Não está mais caindo e algo tocou nela. Já pode travar
+                rb.constraints = RigidbodyConstraints2D.FreezeAll; 
             }
            
         }
