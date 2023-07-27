@@ -20,13 +20,13 @@ public class LevelManager : MonoBehaviour
         StartCoroutine(LoadLevel(SceneManager.GetActiveScene().buildIndex, delay));
     }
 
-    /// Carrega o nível
+    /// Carrega um nível a partir do seu Index nas Build Settings.
     public void PlayLevel(int buildIndex)
     {
         StartCoroutine(LoadLevel(buildIndex));
     }
 
-    /// ????
+    /// Carrega um nível de forma assíncrona. 
     IEnumerator LoadLevel(int buildIndex, float delay = 0f)
     {
         yield return new WaitForSeconds(delay);
