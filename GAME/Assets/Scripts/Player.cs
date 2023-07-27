@@ -51,6 +51,7 @@ public class Player : MonoBehaviour, I_HitableObj
     /// Start é chamado antes do primeiro update de frame
     void Start()
     {
+        /// Carregando variáveis
         anim = this.gameObject.GetComponent<Animator>();
         spr = this.gameObject.GetComponent<SpriteRenderer>();
         aud = this.gameObject.GetComponent<AudioSource>();

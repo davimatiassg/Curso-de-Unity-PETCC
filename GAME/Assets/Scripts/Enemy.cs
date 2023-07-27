@@ -47,6 +47,7 @@ public class Enemy : MonoBehaviour, I_HitableObj
     /// Start é chamado antes do primeiro update de frame
     void Start()
     {
+        /// Carregando variáveis
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         aud = GetComponent<AudioSource>();

@@ -9,20 +9,21 @@ public class Lava : MonoBehaviour
     private AudioSource aud;
     [SerializeField] private Transform lavaTop;
 
-    public float tExtrWait = 4f;
-    private float extrWaitCd = 4f;
+    static public float tUntilActive = 4f; //!< Tempo entre as paredes de lava
+    private float untilActiveCd = tUntilActive; //!< Cooldown do tUntilActive
 
-    public float tExtr = 2f;
-    private float extrCd = 2f;
+    static public float tLavaWall = 2f; //!< Tempo de duração da parede de lava
+    private float lavaWallCd = tLavaWall; //!< Cooldown do tLavaWall
 
-    private float altura;
+    private float altura; //!< Altura da parede de lava
 
     [SerializeField] AudioClip extrLava;
     bool extrLavaOn = false;
 
-    // Start is called before the first frame update
+    /// Start é chamado antes do primeiro update de frame
     void Start()
     {
+        /// Carregando variáveis
         col = GetComponent<BoxCollider2D>();
         spr = GetComponent<SpriteRenderer>();
         aud = lavaTop.gameObject.GetComponent<AudioSource>();
@@ -30,44 +31,52 @@ public class Lava : MonoBehaviour
         altura = spr.size.y;
         lavaTop.localPosition = Vector2.up * (0.25f + (spr.size.y * 0.5f));
         aud.minDistance = spr.size.x;
-        aud.maxDistance = aud.minDistance +5f;
-        
+        aud.maxDistance = aud.minDistance + 5f;
     }
 
-    // Update is called once per frame
+    /// Update é chamado uma vez por frame
     void Update()
     {
-        if (extrWaitCd < 0 && extrCd < 0)
+        /// Se a parede de lava já se abaixou
+        if (untilActiveCd < 0 && lavaWallCd < 0)
         {
-            // O extr de lava parou; resetar os timers
-            extrWaitCd = tExtrWait;
-            extrCd = tExtr;
+            /// Resetar os timers
+            untilActiveCd = tUntilActive;
+            lavaWallCd = tLavaWall;
             extrLavaOn = false;
         }
         else {
-            if (extrWaitCd < 0)
+
+            /// Se chegou a hora de uma nova parede de lava
+            if (untilActiveCd < 0)
             {
-                // Acabou o cooldown; lançando o extr de lava
-                if (extrCd >= 0)
+                /// Enquanto a parede de lava estiver de pé
+                if (lavaWallCd >= 0)
                 {
-                    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
-                    if (!extrLavaOn) aud.PlayOneShot(extrLava);  // TORNAR LOCAL !!!!!!!!!!!
+                    /// Som da lava
+                    if (!extrLavaOn) aud.PlayOneShot(extrLava);
                     extrLavaOn = true;
 
+                    /// ------- Alterando a altura da parede de lava -------
 
-                    float r = extrCd/tExtr;
-                    float extrH = 10f*(r < 0.5 ? r : 1 - r); 
+                    float r = lavaWallCd/tLavaWall; //!<  1 - (tempoDecorrido ÷ tempoTotal)
+
+                    /* Se o tempo estiver menor que a metade da duração total: suba,
+                    caso contrário: desça. */
+                    float extrH = 10f*(r < 0.5 ? r : 1 - r);
                     
-                    spr.size = new Vector2(spr.size.x, altura * (1f + extrH));
+                    spr.size = new Vector2(spr.size.x, altura * (1f + extrH)); /// alterando o tamanho do sprite
                     lavaTop.localPosition = Vector2.up * (0.25f + (spr.size.y * 0.5f));
 
-                    extrCd -= Time.deltaTime;
+                    /// Distância mínima e máxima para emitir o som
                     aud.minDistance = spr.size.x +10f;
                     aud.maxDistance = aud.minDistance +5f;
+
+                    lavaWallCd -= Time.deltaTime;
                 }
             }
             else {
-                extrWaitCd -= Time.deltaTime;
+                untilActiveCd -= Time.deltaTime;
             }
 
         }
@@ -78,8 +87,12 @@ public class Lava : MonoBehaviour
     {
         I_HitableObj hit = col.gameObject.GetComponent<I_HitableObj>();
         if(hit != null) { 
+
+            /// Aplicando dano no que foi colidido
             hit.TakeHit(3, GetComponent<Collider2D>().ClosestPoint(col.bounds.center));
             Rigidbody2D hit_rb = col.attachedRigidbody;
+
+            /// Jogando o que foi colidido para cima
             if(hit_rb != null)
             {
                 hit_rb.velocity = new Vector2(0, 30f);
