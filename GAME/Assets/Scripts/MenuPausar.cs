@@ -16,9 +16,10 @@ public class MenuPausar : MonoBehaviour
 
     private bool menuOpcoesAberto = false;
 
+    /// Start é chamado antes do primeiro update de frame
     void Start()
     {
-        // Carregar as configurações de volume atuais
+        /// Carregar as configurações de volume atuais
         volumeMusicaSlider.value = PlayerPrefs.GetFloat("VolumeMusica", 1f);
         volumeEfeitosSlider.value = PlayerPrefs.GetFloat("VolumeEfeitos", 1f);
         sfx = new List<AudioSource>(Object.FindObjectsByType<AudioSource>(FindObjectsSortMode.None));
@@ -35,6 +36,7 @@ public class MenuPausar : MonoBehaviour
     public void PausarJogo(){
         Time.timeScale = 0; 
         botaoPausa.interactable = false;
+
         menuPausa.SetActive(true);
         menuMusicaSlider.SetActive(false);
         menuEfeitosSlider.SetActive(false);
@@ -43,27 +45,34 @@ public class MenuPausar : MonoBehaviour
     public void Continuar(){
         Time.timeScale = 1; 
         botaoPausa.interactable = true;
+
         menuPausa.SetActive(false);
     }
+
     public void IrParaMenu(){
         Time.timeScale = 1; 
         UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
     }
+
     public void Opcoes(){
-        // Toggle menu opções
+        /// Ativa/Desativa menu opções
         menuOpcoesAberto = !menuOpcoesAberto;
         menuMusicaSlider.SetActive(menuOpcoesAberto);
         menuEfeitosSlider.SetActive(menuOpcoesAberto);
     }
+
     public void SetVolumeMusica(){
-        // Atribuir o volume da músicza de fundo
+        /// Atribuir o volume da músicza de fundo
         musica.volume = volumeMusicaSlider.value;
-        // Salvar o volume da música de fundo
+        /// Salvar o volume da música de fundo
         PlayerPrefs.SetFloat("VolumeMusica", volumeMusicaSlider.value);
         PlayerPrefs.Save();
     }
+
+    /// WORK IN PROGRESS !!! ---------------------------------------------------------------------------------------
     public void SetVolumeEfeitos(){
         List<AudioSource> destroyed = new List<AudioSource>();
+
         foreach(AudioSource fx in sfx)
         {
             if(fx)
@@ -75,10 +84,12 @@ public class MenuPausar : MonoBehaviour
                 destroyed.Add(fx);
             }
         }
+
         foreach(AudioSource d in destroyed)
         {
             sfx.Remove(d);
         }
+
         PlayerPrefs.SetFloat("VolumeEfeitos", volumeEfeitosSlider.value);
         PlayerPrefs.Save();
     }
