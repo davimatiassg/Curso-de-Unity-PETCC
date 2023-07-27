@@ -5,37 +5,36 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, I_HitableObj
 {
-    // Atributos
+    /// Atributos
     [SerializeField] private int Hp = 5;
     [SerializeField] private float speed = 10f;
     [SerializeField] private float jump = 20f;
-    [SerializeField] private float inv_time = 3f;
+    [SerializeField] private float inv_time = 3f; //!< Tempo de invencibilidade em segundos
+    private float invt = 0; //!< Cool down do tempo de invencibilidade
 
-    private float invt = 0;
-
-    // Estado:
+    /// Estado
     private bool playable = true;
 
-    // Movimentação
+    /// Movimentação
     private float hAxis;
     [SerializeField] private LayerMask solid;
     [SerializeField] private Transform floorCheck;
     private Rigidbody2D rb;
 
-    // Ataque     
+    /// Ataque     
     [SerializeField] private Transform sling;
     [SerializeField] private float atkCd = 0.25f;
     [SerializeField] private float atkc = 0;
     [SerializeField] private GameObject pellet;
 
-    // Colecionáveis
+    /// Colecionáveis
     [SerializeField] private Scorer sc;
 
-    // Animação:
+    /// Animação
     private Animator anim;
     private SpriteRenderer spr;
 
-    // Sons
+    /// Sons
     [SerializeField] AudioClip collectSound;
     [SerializeField] AudioClip stepSound;
     [SerializeField] AudioClip jumpSound;
@@ -43,11 +42,13 @@ public class Player : MonoBehaviour, I_HitableObj
     [SerializeField] AudioClip pelletSound;
     AudioSource aud;
     int justJumped = 0;
-    // Vfx
+
+    /// Vfx
     [SerializeField] private GameObject hitVFX;
 
-    /// Métodos da Unity:
-    //Start called when the scene is initiated.
+    /// ------- Métodos da Unity -------
+
+    /// Start é chamado antes do primeiro update de frame
     void Start()
     {
         anim = this.gameObject.GetComponent<Animator>();
@@ -58,25 +59,26 @@ public class Player : MonoBehaviour, I_HitableObj
         sc.AddScore(0);
     }
 
-    // Update is called once per frame
+    /// Update é chamado uma vez por frame
     void Update()
     {
-        // Se o jogador estiver podendo se mover:
+        /// Se o jogador estiver podendo se mover:
         if(playable)
         {
-            // Recebe o input do usuário e vira o player na direção certa
+            /// Recebe o input do usuário e vira o player na direção certa
             hAxis = Input.GetAxisRaw("Horizontal");
             if(hAxis != 0)
             {
                 Flip();
             }
             
-            // Pulo
+            /// Pulo
             if (Input.GetButton("Jump") && IsOnGround())
             {
                 rb.velocity = new Vector2(rb.velocity.x, jump);
                 if (justJumped == 0)
-                { // Só tocando o som em um novo pulo
+                { 
+                    /// Só tocando o som em um novo pulo
                     aud.PlayOneShot(jumpSound);
                     justJumped ++;
                 }
@@ -84,7 +86,7 @@ public class Player : MonoBehaviour, I_HitableObj
             }
             if (justJumped > 0) justJumped --;
 
-            // Ataque
+            /// Ataque
             if(atkc > 0) { atkc -= Time.deltaTime; }
             if (Input.GetButtonDown("Fire1") && atkc <= 0)
             {
@@ -93,7 +95,7 @@ public class Player : MonoBehaviour, I_HitableObj
                 atkc = atkCd;
             }
 
-            // Invencibilidade após receber dano
+            /// Invencibilidade após receber dano
             if(invt > 0)
             { 
                 invt -= Time.deltaTime; 
@@ -101,7 +103,7 @@ public class Player : MonoBehaviour, I_HitableObj
                 if(invt <= 0) { spr.color = Color.white; }
             }
 
-            // Animação
+            /// Animação
             anim.SetBool("OnGround", IsOnGround());
             anim.SetBool("Moving", hAxis != 0);
         }
@@ -110,14 +112,14 @@ public class Player : MonoBehaviour, I_HitableObj
 
     private void FixedUpdate()
     {
-        // Movimentação
+        /// Movimentação
         if(playable)
         {
             rb.velocity = new Vector2(hAxis * speed, rb.velocity.y);
         }
     }
 
-    // Linhas de auxílio (somente no editor do Unity)
+    /// Linhas de auxílio (somente no editor do Unity)
     public void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color(1, 0, 0, 1f);
@@ -125,15 +127,15 @@ public class Player : MonoBehaviour, I_HitableObj
     }
 
 
-    /// ** Métodos de controle das ações:
+    /// ------- Métodos de controle das ações -------
 
-    // Se o jogador está no chão
+    /// Se o jogador está no chão
     private bool IsOnGround()
     {
         return Physics2D.OverlapCircle(floorCheck.position, 0.2f, solid);
     }
 
-    // Virar o player para a direção certa
+    /// Virar o player para a direção certa
     private void Flip()
     {
         Vector3 scale = transform.localScale;
@@ -141,7 +143,7 @@ public class Player : MonoBehaviour, I_HitableObj
         transform.localScale = scale;
     }
 
-    // Disparar um projétil
+    /// Disparar um projétil
     public void Shoot()
     {
         GameObject shot = Instantiate(pellet);
@@ -152,21 +154,25 @@ public class Player : MonoBehaviour, I_HitableObj
         aud.PlayOneShot(pelletSound);
     }
 
-    /// ** Métodos chamados por outros scripts:
+    /// ------- Métodos chamados por outros scripts -------
 
-    // Receber dano
+    /// Receber dano
     public void TakeHit(int damage, Vector2 hitPos)
     {   
+        /// Se o jogador está jogável e não invencível
         if(playable && invt <= 0)
         {
+            /// Deixando o jogador injogavel e invencível
             invt = inv_time;
             playable = false;
             Instantiate(hitVFX, transform);
             rb.velocity -= hitPos - (Vector2)transform.position;
 
+            /// Recebendo dano
             Hp -= damage;
             sc.UpdateLives(Hp);
 
+            /// Morrendo :(
             if(Hp <= 0)
             {
                 playable = false;
@@ -174,6 +180,7 @@ public class Player : MonoBehaviour, I_HitableObj
                 GameObject.FindWithTag("SceneLoader").GetComponent<LevelManager>().ReloadLevel(1f);
             }
 
+            /// Indicando o dano por uma animação em um efeito sonoro
             anim.Play("Hurt");
             aud.PlayOneShot(hurtSound);
 
@@ -181,20 +188,20 @@ public class Player : MonoBehaviour, I_HitableObj
         
     }
 
-    // Coletar um item
+    /// Coletar um item
     public void Collect(int scoreBonus = 0) {
-        // Toca o som de coleta e adiciona os pontos ao score
+        /// Toca o som de coleta e adiciona os pontos ao score
         aud.PlayOneShot(collectSound);
         sc.AddScore(scoreBonus);
     }
 
-    // Entregar o controle do player de volta ao usuário.
+    /// Entregar o controle do player de volta ao usuário.
     public void makePlayable(){
         playable = true;
     }
 
 
-    // Efeitos sonoros
+    /// Efeitos sonoros
     public void playStepSound()
     {
         aud.PlayOneShot(stepSound);
