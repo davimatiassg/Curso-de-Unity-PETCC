@@ -11,20 +11,22 @@ public class Pellet : MonoBehaviour
 
     public Rigidbody2D rb;
     public Transform trs;
-    private bool damaged;
-
+    private bool damaged; //!< Se já deu dano em algo
 
     public void OnCollisionEnter2D(Collision2D col)
     {
+        /// Se está ainda não deu dano e está colidindo com o player
         if(!damaged && col.gameObject.tag != "Player")
         {
             I_HitableObj hit = col.gameObject.GetComponent<I_HitableObj>();
-            Destroy(this.gameObject, 0.15f);
-            if(hit != null) 
+
+            if(hit != null)
             { 
                 hit.TakeHit(dmg, col.GetContact(0).point); 
                 damaged = true;
             }     
+
+            Destroy(this.gameObject, 0.15f);
             
         }
         GetComponent<AudioSource>().PlayOneShot(pelletHitSound);
