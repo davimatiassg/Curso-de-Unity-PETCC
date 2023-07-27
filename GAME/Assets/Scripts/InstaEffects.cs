@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class InstaEffects : MonoBehaviour
 {
-    // Start is called before the first frame update
+    /// Start é chamado antes do primeiro update de frame
     void Start()
     {
+        /// Destruindo o objeto ao fim das partículas
         float duration = GetComponent<ParticleSystem>().main.duration;
         Destroy(this.gameObject, duration);
     }
