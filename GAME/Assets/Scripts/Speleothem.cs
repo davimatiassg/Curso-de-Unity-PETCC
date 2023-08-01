@@ -114,7 +114,7 @@ public class Speleothem : MonoBehaviour, I_HitableObj
 
             HurtBox.enabled = false;
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-            rb.velocity = Vector2.down * 12;
+            rb.velocity = Vector2.up * 3;
             
             isFalling = true;
         }
