@@ -132,7 +132,7 @@ public class Player : MonoBehaviour, I_HitableObj
     /// ------- Métodos de controle das ações -------
 
     /// Se o jogador está no chão
-    private bool IsOnGround()
+    public bool IsOnGround()
     {
         return Physics2D.OverlapCircle(floorCheck.position, 0.2f, solid);
     }
@@ -198,13 +198,17 @@ public class Player : MonoBehaviour, I_HitableObj
     }
 
     /// Entregar o controle do player de volta ao usuário.
-    public void makePlayable(){
+    public void MakePlayable(){
         playable = true;
+    }
+
+    public void MakeUnPlayable(){
+        playable = false;
     }
 
 
     /// Efeitos sonoros
-    public void playStepSound()
+    public void PlayStepSound()
     {
         aud.PlayOneShot(stepSound);
     }

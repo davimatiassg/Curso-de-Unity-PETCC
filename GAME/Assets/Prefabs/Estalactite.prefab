@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: -1517419497128760635}
   m_Layer: 6
   m_Name: Estalactite
-  m_TagString: Untagged
+  m_TagString: backgroundObj
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -102,9 +102,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f39ed2c048659941bffbd1167093287, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dmg: 2
   player: {fileID: 0}
   HitBox: {fileID: 4914411243060558151}
-  PlaceBox: {fileID: 3197989905532390557}
+  HurtBox: {fileID: 3197989905532390557}
+  SolidBox: {fileID: 5008022398389844045}
   hitVFX: {fileID: 4979629722934254568, guid: eda25f2fa15e17444b9da86fc78bb3e1, type: 3}
   stalactiteFall: {fileID: 8300000, guid: e8c64d84199516e4187235e7f1f7e09b, type: 3}
 --- !u!50 &4914411243060558148
@@ -153,9 +155,9 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0, y: -1.2}
-      - {x: -0.6, y: 0.4}
-      - {x: 0.6, y: 0.4}
+    - - {x: 0, y: -0.9}
+      - {x: -0.5, y: -0.02}
+      - {x: 0.5, y: -0.02}
 --- !u!61 &5008022398389844045
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -180,7 +182,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 0.9}
   m_EdgeRadius: 0
 --- !u!70 &3197989905532390557
 CapsuleCollider2D:

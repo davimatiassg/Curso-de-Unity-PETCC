@@ -4,9 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Coin
   - Moeda
   - SceneLoader
+  - backgroundObj
   layers:
   - Default
   - TransparentFX
