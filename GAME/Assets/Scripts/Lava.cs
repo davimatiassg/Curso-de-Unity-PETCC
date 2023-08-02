@@ -21,7 +21,6 @@ public class Lava : MonoBehaviour
     [SerializeField] AudioClip extrLava;
 
     private bool isExtruding = false;
-    private Vector2 targetDim;
     private float extrSpeed;
 
     /// Start é chamado antes do primeiro update de frame
@@ -36,7 +35,6 @@ public class Lava : MonoBehaviour
         /// Posicionando elementos da Lava
         lavaTop.gameObject.GetComponent<SpriteRenderer>().size = new Vector2(spr.size.x, 0.5f);
         minDim = trs.position;
-        targetDim = maxDim;
         extrSpeed = Vector2.Distance(maxDim, minDim)*2/lavaTime;
         lavaTop.position = trs.position + Vector3.right*spr.gameObject.transform.localPosition.x + Vector3.up * 0.25f;
         eff.surfaceLevel = 1;
@@ -52,7 +50,8 @@ public class Lava : MonoBehaviour
     /// Update é chamado uma vez por frame
     void Update()
     {
-        if(isExtruding) { ExtrudeLava(); }
+        if(isExtruding) { ExtrudeLava(maxDim); }
+        else { ExtrudeLava(minDim); }
     }
 
     /// Muda o valor de isExtruding quando precisar iniciar ou interromper a extrusão
@@ -68,7 +67,7 @@ public class Lava : MonoBehaviour
     /// Aguarda o tempo de recarga da extrusão para iniciar uma nova.
     IEnumerator WaitForLava()
     {
-        yield return new WaitForSeconds(lavaWait);
+        yield return new WaitForSeconds(lavaWait+lavaTime);
         aud.PlayOneShot(extrLava);
         isExtruding = true;
     }
@@ -82,17 +81,14 @@ public class Lava : MonoBehaviour
 
 
     /// Movimenta a Lava 
-    void ExtrudeLava()
+    void ExtrudeLava(Vector2 targetDim)
     {
-        /// Quando chegar ao ponto máximo (aproximado) da extrusão de lava
-        if(Mathf.Abs(trs.position.y - targetDim.y) < 0.2f)
+        if(Mathf.Abs(trs.position.y - targetDim.y) > 0.2f)
         {
-            /// Troque a posição-alvo para o estado anterior.
-            if(targetDim == maxDim){targetDim = minDim;}
-            else {targetDim = maxDim;}
+            /// Alterando a altura da lava, guardando a variação na altura da coluna.
+            trs.position = Vector2.MoveTowards(trs.position, targetDim, Time.deltaTime * extrSpeed);
         }
-        /// Alterando a altura da lava, guardando a variação na altura da coluna.
-        trs.position = Vector2.MoveTowards(trs.position, targetDim, Time.deltaTime * extrSpeed);
+        
     }
 
 
