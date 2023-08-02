@@ -40,7 +40,7 @@ public class Lava : MonoBehaviour
         minDim = spr.size;
         targetDim = maxDim;
         extrSpeed = Vector2.Distance(maxDim, minDim)*2/lavaTime;
-        eff.surfaceLevel = 1 + spr.size.y/2;
+        eff.surfaceLevel = spr.size.y/2;
         
         /// Configurando alcance do áudio
         aud.minDistance = spr.size.x;
@@ -127,7 +127,7 @@ public class Lava : MonoBehaviour
             }*/
         }
     }
-    /*
+    
     void OnDrawGizmosSelected()
     {
         if(!trs)
@@ -140,8 +140,7 @@ public class Lava : MonoBehaviour
         lavaTop.localPosition = Vector2.up * (0.25f + (spr.size.y/2));
 
         Gizmos.color = Color.red;
-        minDim = spr.size;
         Gizmos.DrawWireCube(trs.position + Vector3.up * Mathf.Abs(maxDim.y - spr.size.y)/2 , maxDim);
-    }*/
+    }
 
 }
