@@ -5,7 +5,7 @@ using UnityEngine;
 public class Lava : MonoBehaviour
 {
     private BoxCollider2D col;
-    private SpriteRenderer spr;
+    [SerializeField] private SpriteRenderer spr;
     private AudioSource aud;
     private Transform trs;
     private BuoyancyEffector2D eff;
@@ -29,24 +29,24 @@ public class Lava : MonoBehaviour
     {
         /// Carregando variáveis
         col = GetComponent<BoxCollider2D>();
-        spr = GetComponent<SpriteRenderer>();
         aud = lavaTop.gameObject.GetComponent<AudioSource>();
         trs = GetComponent<Transform>();
         eff = GetComponent<BuoyancyEffector2D>();
 
         /// Posicionando elementos da Lava
         lavaTop.gameObject.GetComponent<SpriteRenderer>().size = new Vector2(spr.size.x, 0.5f);
-        lavaTop.localPosition = Vector2.up * (0.25f + (spr.size.y/2));
-        minDim = spr.size;
+        minDim = trs.position;
         targetDim = maxDim;
         extrSpeed = Vector2.Distance(maxDim, minDim)*2/lavaTime;
-        eff.surfaceLevel = spr.size.y/2;
+        lavaTop.position = trs.position + Vector3.right*spr.gameObject.transform.localPosition.x + Vector3.up * 0.25f;
+        eff.surfaceLevel = 1;
         
         /// Configurando alcance do áudio
         aud.minDistance = spr.size.x;
         aud.maxDistance = aud.minDistance + 5f;
 
-        StartCoroutine(Countdown());
+        if(lavaWait * lavaTime != 0){ StartCoroutine(Countdown()); }
+        
     }
 
     /// Update é chamado uma vez por frame
@@ -84,32 +84,20 @@ public class Lava : MonoBehaviour
     /// Movimenta a Lava 
     void ExtrudeLava()
     {
-        /// Se chegou ao tamanho-alvo
-        if(spr.size == targetDim)
+        /// Quando chegar ao ponto máximo (aproximado) da extrusão de lava
+        if(Mathf.Abs(trs.position.y - targetDim.y) < 0.2f)
         {
-            /// Troque o tamanho-alvo para o estado anterior.
+            /// Troque a posição-alvo para o estado anterior.
             if(targetDim == maxDim){targetDim = minDim;}
             else {targetDim = maxDim;}
         }
-
-        /// Alterando o tamanho da lava, guardando a variação na altura da coluna.
-        float pDelta = -spr.size.y; 
-        spr.size = Vector2.MoveTowards(spr.size, targetDim, extrSpeed*Time.deltaTime); /// Alterando o tamanho da lava
-        pDelta += spr.size.y;
-        pDelta = pDelta/2;
-
-        /// Alterando posições da lava e do topo da lava
-        trs.position += Vector3.up*pDelta; 
-        lavaTop.localPosition = Vector2.up * (0.25f + (spr.size.y * 0.5f));
-        eff.surfaceLevel += pDelta;
-        /// Som da lava
-        aud.minDistance = spr.size.x +10f;
-        aud.maxDistance = aud.minDistance +5f;
+        /// Alterando a altura da lava, guardando a variação na altura da coluna.
+        trs.position = Vector2.MoveTowards(trs.position, targetDim, Time.deltaTime * extrSpeed);
     }
 
 
     /// Quando algo entrar no alcance:
-    public void OnTriggerEnter2D(Collider2D col)
+    public void OnTriggerStay2D(Collider2D col)
     {
         I_HitableObj hit = col.gameObject.GetComponent<I_HitableObj>();
         if(hit != null) { 
@@ -117,14 +105,11 @@ public class Lava : MonoBehaviour
             /// Aplicando dano no que foi colidido
             hit.TakeHit(3, GetComponent<Collider2D>().ClosestPoint(col.bounds.center));
             Rigidbody2D hit_rb = col.attachedRigidbody;
-            /*
             /// Jogando o que foi colidido para cima
             if(hit_rb != null)
             {
-                Debug.Log("wowo");
-                Debug.Log(col.gameObject);
-                hit_rb.velocity = new Vector2(0, 30f);
-            }*/
+                hit_rb.AddForce(Vector2.up);
+            }
         }
     }
     
@@ -132,15 +117,15 @@ public class Lava : MonoBehaviour
     {
         if(!trs)
         {
-            spr = GetComponent<SpriteRenderer>();
             trs = GetComponent<Transform>();
         }
+        spr.gameObject.transform.localPosition = new Vector2 (spr.gameObject.transform.localPosition.x, -spr.size.y/2);
         /// Posicionando elementos da Lava
         lavaTop.gameObject.GetComponent<SpriteRenderer>().size = new Vector2(spr.size.x, 0.5f);
-        lavaTop.localPosition = Vector2.up * (0.25f + (spr.size.y/2));
+        lavaTop.position = trs.position + Vector3.right*spr.gameObject.transform.localPosition.x + Vector3.up * 0.25f;
 
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(trs.position + Vector3.up * Mathf.Abs(maxDim.y - spr.size.y)/2 , maxDim);
+        Gizmos.DrawWireCube(maxDim + (Vector2)spr.gameObject.transform.localPosition, spr.size);
     }
 
 }

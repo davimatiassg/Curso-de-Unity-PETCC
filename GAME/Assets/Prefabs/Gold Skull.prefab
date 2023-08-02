@@ -210,12 +210,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
   hp: 5
-  hitVFX: {fileID: 4979629722934254568, guid: eda25f2fa15e17444b9da86fc78bb3e1, type: 3}
-  deathVFX: {fileID: 4979629722934254568, guid: 86066868dd430dd4cb303707ab4f7ca4, type: 3}
   speed: 2
   jump: 5
   atkDmg: 1
   scale: 1
+  disMax: 15
+  disJump: 1.6
   floorChk: {fileID: 5089496301031279395}
   solid:
     serializedVersion: 2
@@ -223,6 +223,8 @@ MonoBehaviour:
   stepSound: {fileID: 8300000, guid: 527d3097e035dba449fcb1ff818a42ec, type: 3}
   hurtSound: {fileID: 8300000, guid: 11bf61655cb07d7419bd7be21a10bdce, type: 3}
   dyingSound: {fileID: 8300000, guid: 39a70509e23113b4e88a72c837ba0d0f, type: 3}
+  hitVFX: {fileID: 4979629722934254568, guid: eda25f2fa15e17444b9da86fc78bb3e1, type: 3}
+  deathVFX: {fileID: 4979629722934254568, guid: 86066868dd430dd4cb303707ab4f7ca4, type: 3}
 --- !u!95 &5089496301694681257
 Animator:
   serializedVersion: 5

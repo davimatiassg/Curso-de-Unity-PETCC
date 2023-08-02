@@ -14,9 +14,9 @@ public class Enemy : MonoBehaviour, I_HitableObj
     [SerializeField] private float scale = 1f;
 
     /// Movimentação
-    private float disMax = 8.5f; //!< Distância máxima para perseguir o jogador
+    [SerializeField] private float disMax = 8.5f; //!< Distância máxima para perseguir o jogador
     private float disMin = 0.1f; //!< Distância mínima para perseguir o jogador
-    private float disJump = 1.6f; //!< Distância mínima vertical do jogador para pular
+    [SerializeField] private float disJump = 1.6f; //!< Distância mínima vertical do jogador para pular
 
     static private float jumpCd = 1.5f; //!< Tempo mínimo entre pulos
     private float tJump = 0; //!< Cooldown do jumpCd
