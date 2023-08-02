@@ -39373,7 +39373,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 13.700012, y: -9.410004}
+  m_AnchoredPosition: {x: 13.700012, y: -9.410034}
   m_SizeDelta: {x: 140.2542, y: 28.4362}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &409894049
@@ -70777,6 +70777,14 @@ PrefabInstance:
     - target: {fileID: 4915277718283595840, guid: 7b05d69baa3031545a483aeac8e36425, type: 3}
       propertyPath: m_Name
       value: Pitfall
+      objectReference: {fileID: 0}
+    - target: {fileID: 4915277718283595843, guid: 7b05d69baa3031545a483aeac8e36425, type: 3}
+      propertyPath: m_Size.x
+      value: 34.650894
+      objectReference: {fileID: 0}
+    - target: {fileID: 4915277718283595843, guid: 7b05d69baa3031545a483aeac8e36425, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.68714905
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7b05d69baa3031545a483aeac8e36425, type: 3}

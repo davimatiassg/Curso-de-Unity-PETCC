@@ -5,11 +5,12 @@ using UnityEngine;
 public class Pitfall : MonoBehaviour
 {
     public int dmg = 2;
+    
     [SerializeField] GameObject player;
     private Transform p_trs;
     private Rigidbody2D p_rig;
     private Player p_bhv;
-    [SerializeField] private float deadZone = 0f;
+
     [SerializeField] private LinkedList<Vector2> recorded = new LinkedList<Vector2>();
 
     private bool isRecording = false;

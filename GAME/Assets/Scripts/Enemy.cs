@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour, I_HitableObj
 
     /// Movimentação
     private float disMax = 8.5f; //!< Distância máxima para perseguir o jogador
-    private float disMin = 0.5f; //!< Distância mínima para perseguir o jogador
+    private float disMin = 0.1f; //!< Distância mínima para perseguir o jogador
     private float disJump = 1.6f; //!< Distância mínima vertical do jogador para pular
 
     static private float jumpCd = 1.5f; //!< Tempo mínimo entre pulos
@@ -62,7 +62,7 @@ public class Enemy : MonoBehaviour, I_HitableObj
         Vector2 pDir = Player.transform.position - transform.position;
 
         /// Se o player está longe o bastante e perto o bastante para se perseguido
-        if (Mathf.Abs(pDir.x) > disMin && Mathf.Abs(pDir.x) < disMax)
+        if (Mathf.Abs(pDir.x) > disMin && Mathf.Abs(pDir.x) < disMax && Mathf.Abs(pDir.y) < disMax*3)
         {
             /// Persegue o Player
             rb.velocity = new Vector2((Mathf.Sign(pDir.x)) * speed, rb.velocity.y);

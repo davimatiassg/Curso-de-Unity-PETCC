@@ -12,12 +12,14 @@ public class Speleothem : MonoBehaviour, I_HitableObj
     [SerializeField] private CapsuleCollider2D HurtBox;
     [SerializeField] private BoxCollider2D SolidBox;
     [SerializeField] private GameObject hitVFX; //!< Efeito visual do hit
+    [SerializeField] private Transform sensor;
+    [SerializeField] private float sensorRange;
 
     [SerializeField] AudioClip stalactiteFall;
 
     private Rigidbody2D rb;
 
-    private Vector2 ray_angle = Quaternion.AngleAxis(-20f, Vector3.forward) * Vector2.down;
+    private Vector2 ray_angle;
 
     bool isFalling = false;                //!< Se a estalactite já colidiu com alguma coisa
 
@@ -27,13 +29,14 @@ public class Speleothem : MonoBehaviour, I_HitableObj
         rb = GetComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
         player = GameObject.FindWithTag("Player");
+        ray_angle = sensor.rotation * Vector2.down;
     }
 
     void FixedUpdate()
     {
         if(!isFalling)
         {
-            RaycastHit2D ray = Physics2D.Raycast(transform.position, ray_angle, 100f);
+            RaycastHit2D ray = Physics2D.Raycast(sensor.position, ray_angle, sensorRange, Physics2D.AllLayers);
 
             /// Se o player colidiu com o raycast
             if (ray.collider != null && ray.collider.gameObject == player)
@@ -77,7 +80,6 @@ public class Speleothem : MonoBehaviour, I_HitableObj
             Collider2D[] overlaps = Physics2D.OverlapPointAll(transform.position + (Vector3.down * 0.02f));
             foreach(Collider2D c in overlaps)
             {
-                Debug.Log(c.gameObject);
                 if(c.gameObject == col.gameObject)
                 {
                     /// Fixando o espeleotema ao objeto do cenário 
@@ -118,6 +120,13 @@ public class Speleothem : MonoBehaviour, I_HitableObj
             
             isFalling = true;
         }
+    }
+
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(sensor.position, sensor.position + (sensor.rotation * Vector3.down) * sensorRange);
     }
 
 }

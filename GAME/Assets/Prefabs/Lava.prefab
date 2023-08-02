@@ -227,13 +227,14 @@ GameObject:
   m_Component:
   - component: {fileID: 6359865997701305008}
   - component: {fileID: 6359865997701305009}
+  - component: {fileID: 9140145286004864733}
   - component: {fileID: 6359865997701305014}
   - component: {fileID: 6359865997701305015}
   - component: {fileID: 6359865997701305012}
   - component: {fileID: -8288883630082393976}
   m_Layer: 0
   m_Name: Lava
-  m_TagString: Untagged
+  m_TagString: backgroundObj
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -306,6 +307,25 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!253 &9140145286004864733
+BuoyancyEffector2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6359865997701305013}
+  m_Enabled: 1
+  m_UseColliderMask: 0
+  m_ColliderMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_SurfaceLevel: 1
+  m_Density: 500
+  m_LinearDrag: 50
+  m_AngularDrag: 100
+  m_FlowAngle: 0
+  m_FlowMagnitude: 0
+  m_FlowVariation: 0
 --- !u!61 &6359865997701305014
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -317,7 +337,7 @@ BoxCollider2D:
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_UsedByEffector: 0
+  m_UsedByEffector: 1
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
@@ -344,9 +364,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7797927bce0a65e4d9fb52175303831f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lavaWait: 4
+  lavaTime: 2
+  maxDim: {x: 1, y: 1}
+  minDim: {x: 1, y: 1}
   lavaTop: {fileID: 6359865996962771710}
-  tExtrWait: 4
-  tExtr: 2
   extrLava: {fileID: 8300000, guid: 88fe46a573582fa47adc8d4716be85f7, type: 3}
 --- !u!95 &6359865997701305012
 Animator:
