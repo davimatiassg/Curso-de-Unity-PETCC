@@ -122,7 +122,7 @@ public class Speleothem : MonoBehaviour, I_HitableObj
         }
     }
 
-
+    /// Debug
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;

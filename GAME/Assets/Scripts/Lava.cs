@@ -20,8 +20,8 @@ public class Lava : MonoBehaviour
     [SerializeField] private Transform lavaTop;
     [SerializeField] AudioClip extrLava;
 
-    private bool isExtruding = false;
-    private float extrSpeed;
+    private bool isExtruding = false; //!< Se a parede de lava está ativa
+    private float extrSpeed; //!< Velocidade da extrusão
 
     /// Start é chamado antes do primeiro update de frame
     void Start()

@@ -69,7 +69,6 @@ public class MenuPausar : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    /// WORK IN PROGRESS !!! ---------------------------------------------------------------------------------------
     public void SetVolumeEfeitos(){
         List<AudioSource> destroyed = new List<AudioSource>();
 

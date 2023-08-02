@@ -7,9 +7,9 @@ public class Pitfall : MonoBehaviour
     public int dmg = 2;
     
     [SerializeField] GameObject player;
-    private Transform p_trs;
-    private Rigidbody2D p_rig;
-    private Player p_bhv;
+    private Transform p_trs; //!< posição do player
+    private Rigidbody2D p_rig; //!< rigidbody do player
+    private Player p_bhv; //!< script do player
 
     [SerializeField] private LinkedList<Vector2> recorded = new LinkedList<Vector2>();
 
@@ -30,20 +30,19 @@ public class Pitfall : MonoBehaviour
         if(isRewinding)
         {
             if(recorded.Count > 0)
-            {
+            { /// Inicio do rewind
                 p_bhv.MakeUnPlayable();
                 p_trs.position = recorded.Last.Value;
                 recorded.RemoveLast();
             }
             else
-            {
+            {  /// Fim do rewind
                 isRewinding = false;
                 p_bhv.MakePlayable();
                 p_rig.simulated = true;
-                Debug.Log("gg");
             }
             
-        }
+        } /// Se ele está caindo
         else if(!p_bhv.IsOnGround())
         {
             isRecording = true;
@@ -54,6 +53,7 @@ public class Pitfall : MonoBehaviour
             if(recorded.Count > 5){recorded.RemoveFirst();}
         }
 
+        /// Se está registrando a queda do player
         if(isRecording)
         {
             if(p_bhv.IsOnGround())
@@ -70,6 +70,7 @@ public class Pitfall : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
+        /// Se o player caiu no buraco
         if(col.gameObject == player)
         {
             p_bhv.TakeHit(dmg, p_trs.position);
